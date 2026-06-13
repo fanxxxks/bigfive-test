@@ -38,37 +38,43 @@ const domainInterpretations: Record<string, Record<string, string>> = {
 
 // Career style observations based on domain combinations
 function careerInsights(domains: DomainScore[]): string {
-  const get = (key: string) => domains.find(d => d.key === key)!;
+  const get = (key: string) => domains.find(d => d.key === key);
   const parts: string[] = [];
 
   // O + C combo
   const O = get('O');
   const C = get('C');
-  if (O.level === 'high' && C.level === 'high') {
-    parts.push('您在开放性和尽责性上双高，这意味着您不仅富有创意，还能将想法付诸实践——这是创新型领导者的典型特质。');
-  } else if (O.level === 'high' && C.level === 'low') {
-    parts.push('您创意丰富但执行力稍弱，建议在团队中与擅长执行和规划的同事搭档，将灵感落地。');
+  if (O && C) {
+    if (O.level === 'high' && C.level === 'high') {
+      parts.push('您在开放性和尽责性上双高，这意味着您不仅富有创意，还能将想法付诸实践——这是创新型领导者的典型特质。');
+    } else if (O.level === 'high' && C.level === 'low') {
+      parts.push('您创意丰富但执行力稍弱，建议在团队中与擅长执行和规划的同事搭档，将灵感落地。');
+    }
   }
 
   // E + A combo
   const E = get('E');
   const A = get('A');
-  if (E.level === 'high' && A.level === 'high') {
-    parts.push('外向性和宜人性双高使您在人际交往中如鱼得水，特别适合需要频繁与人打交道并维护良好关系的工作。');
-  } else if (E.level === 'low' && A.level === 'low') {
-    parts.push('您偏向独立工作风格，可能在需要深度专注和独立判断的工作中表现出色，如研究、分析、技术开发等。');
+  if (E && A) {
+    if (E.level === 'high' && A.level === 'high') {
+      parts.push('外向性和宜人性双高使您在人际交往中如鱼得水，特别适合需要频繁与人打交道并维护良好关系的工作。');
+    } else if (E.level === 'low' && A.level === 'low') {
+      parts.push('您偏向独立工作风格，可能在需要深度专注和独立判断的工作中表现出色，如研究、分析、技术开发等。');
+    }
   }
 
   // N insights
   const N = get('N');
-  if (N.level === 'low') {
-    parts.push('您的情绪稳定性很强，这在高压工作环境中是一个巨大的优势——您能够在他人慌乱时保持冷静，做出理性决策。');
-  } else if (N.level === 'high') {
-    parts.push('您对压力较为敏感，建议选择工作环境相对稳定、节奏可控的岗位，避免长期处于高压状态。');
+  if (N) {
+    if (N.level === 'low') {
+      parts.push('您的情绪稳定性很强，这在高压工作环境中是一个巨大的优势——您能够在他人慌乱时保持冷静，做出理性决策。');
+    } else if (N.level === 'high') {
+      parts.push('您对压力较为敏感，建议选择工作环境相对稳定、节奏可控的岗位，避免长期处于高压状态。');
+    }
   }
 
   // C + N combo
-  if (C.level === 'low' && N.level === 'high') {
+  if (C && N && C.level === 'low' && N.level === 'high') {
     parts.push('尽责性偏低配合较高的神经质，可能导致拖延与焦虑的恶性循环。建议从建立简单日常习惯开始，逐步提升自我管理能力。');
   }
 
@@ -76,35 +82,41 @@ function careerInsights(domains: DomainScore[]): string {
 }
 
 function interpersonalInsights(domains: DomainScore[]): string {
-  const get = (key: string) => domains.find(d => d.key === key)!;
+  const get = (key: string) => domains.find(d => d.key === key);
   const parts: string[] = [];
 
   const E = get('E');
   const A = get('A');
   const N = get('N');
 
-  if (E.level === 'high' && A.level === 'high') {
-    parts.push('在人际交往中，您热情开朗且善解人意，是朋友圈中的"人气王"。您善于建立和维护社交关系，但也需注意避免过度迎合他人。');
-  } else if (E.level === 'high' && A.level === 'low') {
-    parts.push('您活跃外向但不太迁就他人，在社交中可能直言不讳。您在群体中引人注目，但有时可能无意中忽略他人的感受。');
-  } else if (E.level === 'low' && A.level === 'high') {
-    parts.push('您虽然不善言辞，但为人真诚友善。您的朋友圈可能不大，但每一段关系都深厚而持久。人们信任您，因为您是一个好的倾听者。');
-  } else if (E.level === 'low' && A.level === 'low') {
-    parts.push('您在人际关系中保持独立和距离感，不依赖社交来获得满足。您珍视个人空间，倾向于与少数志同道合的人建立深入的联系。');
+  if (E && A) {
+    if (E.level === 'high' && A.level === 'high') {
+      parts.push('在人际交往中，您热情开朗且善解人意，是朋友圈中的"人气王"。您善于建立和维护社交关系，但也需注意避免过度迎合他人。');
+    } else if (E.level === 'high' && A.level === 'low') {
+      parts.push('您活跃外向但不太迁就他人，在社交中可能直言不讳。您在群体中引人注目，但有时可能无意中忽略他人的感受。');
+    } else if (E.level === 'low' && A.level === 'high') {
+      parts.push('您虽然不善言辞，但为人真诚友善。您的朋友圈可能不大，但每一段关系都深厚而持久。人们信任您，因为您是一个好的倾听者。');
+    } else if (E.level === 'low' && A.level === 'low') {
+      parts.push('您在人际关系中保持独立和距离感，不依赖社交来获得满足。您珍视个人空间，倾向于与少数志同道合的人建立深入的联系。');
+    }
   }
 
-  if (N.level === 'high') {
-    parts.push('您对他人的言行较为敏感，有时可能过度解读他人的意图。在人际交往中，建议学会区分"事实"和"自己的猜测"，遇到疑虑时主动沟通而非暗自揣测。');
-  } else if (N.level === 'low') {
-    parts.push('您在人际交往中情绪稳定，不容易因为他人的言行而波动。这种稳定性使您成为朋友中的"定海神针"。');
+  if (N) {
+    if (N.level === 'high') {
+      parts.push('您对他人的言行较为敏感，有时可能过度解读他人的意图。在人际交往中，建议学会区分"事实"和"自己的猜测"，遇到疑虑时主动沟通而非暗自揣测。');
+    } else if (N.level === 'low') {
+      parts.push('您在人际交往中情绪稳定，不容易因为他人的言行而波动。这种稳定性使您成为朋友中的"定海神针"。');
+    }
   }
 
   return parts.join('');
 }
 
 function stressInsights(domains: DomainScore[]): string {
-  const N = domains.find(d => d.key === 'N')!;
-  const C = domains.find(d => d.key === 'C')!;
+  const N = domains.find(d => d.key === 'N');
+  const C = domains.find(d => d.key === 'C');
+
+  if (!N || !C) return '您的抗压能力处于中等水平。';
 
   if (N.level === 'low' && C.level === 'high') {
     return '您拥有出色的抗压能力——情绪稳定性高配合高尽责性，使您在压力下不仅保持冷静，还能有条不紊地推进工作。您是团队在危机时刻可以依靠的人。继续保持健康的生活习惯，您的抗压"免疫力"将持久强大。';
@@ -121,43 +133,44 @@ function stressInsights(domains: DomainScore[]): string {
 
 function growthSuggestions(domains: DomainScore[]): string[] {
   const suggestions: string[] = [];
-  const N = domains.find(d => d.key === 'N')!;
-  const C = domains.find(d => d.key === 'C')!;
-  const O = domains.find(d => d.key === 'O')!;
-  const E = domains.find(d => d.key === 'E')!;
-  const A = domains.find(d => d.key === 'A')!;
+  const get = (key: string) => domains.find(d => d.key === key);
+  const N = get('N');
+  const C = get('C');
+  const O = get('O');
+  const E = get('E');
+  const A = get('A');
 
-  if (N.level === 'high') {
+  if (N?.level === 'high') {
     suggestions.push('📿 尝试每天 10 分钟正念冥想，研究表明这能显著降低焦虑水平。');
     suggestions.push('🏃 建立规律运动习惯——运动是天然的"抗焦虑药"，每周 3-5 次有氧运动对情绪管理极有帮助。');
   }
 
-  if (C.level === 'low') {
+  if (C?.level === 'low') {
     suggestions.push('📝 使用"番茄工作法"（25 分钟专注 + 5 分钟休息）来提升工作效率。');
     suggestions.push('🎯 每天设定 1-3 个"必须完成"的小目标，逐步培养成就感和自律能力。');
   }
 
-  if (C.level === 'high') {
+  if (C?.level === 'high') {
     suggestions.push('☯️ 学会"战略性放弃"——并非所有事情都需要做到完美，把精力分配给最重要的事情。');
   }
 
-  if (O.level === 'low') {
+  if (O?.level === 'low') {
     suggestions.push('🌍 每月尝试一件从未做过的事（品尝新菜系、阅读不同类型的书、学习新技能），拓展舒适区边界。');
   }
 
-  if (O.level === 'high') {
+  if (O?.level === 'high') {
     suggestions.push('🎯 从众多兴趣中选择 1-2 个深入发展，将广度转化为深度。');
   }
 
-  if (E.level === 'low') {
+  if (E?.level === 'low') {
     suggestions.push('💬 内向是优势而非劣势。尝试在舒适的小范围内（如 2-3 人的小组）练习主动表达。');
   }
 
-  if (A.level === 'high') {
+  if (A?.level === 'high') {
     suggestions.push('🛡️ 学习设立健康的个人边界，记住：照顾好自己才能更好地帮助他人。');
   }
 
-  if (A.level === 'low') {
+  if (A?.level === 'low') {
     suggestions.push('👂 练习"主动倾听"——在表达观点前，先完整听完对方的意见并用自己的话复述确认。');
   }
 

@@ -1,38 +1,38 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { questions, ITEMS_PER_PAGE } from '../data/questions';
-import { paginateQuestions, computeResults } from '../lib/scoring';
+import type { QuizConfig, BaseResult } from '../lib/quiz-types';
 import LikertScale from './LikertScale';
 import ProgressBar from './ProgressBar';
-import type { PersonalityResult } from '../lib/types';
 
-const LIKERT_LABELS = [
-  '非常不同意',
-  '不同意',
-  '有点不同意',
-  '中立',
-  '有点同意',
-  '同意',
-  '非常同意',
-];
+export interface GenericQuizEngineProps<T extends BaseResult> {
+  config: QuizConfig;
+  /** Scoring function: takes a Map of questionId→score, returns the result */
+  computeResult: (answers: Map<string, number>) => T;
+}
 
-export default function QuizEngine() {
+export default function GenericQuizEngine<T extends BaseResult>({
+  config,
+  computeResult,
+}: GenericQuizEngineProps<T>) {
   const [currentPage, setCurrentPage] = useState(0);
   const [answers, setAnswers] = useState<Map<string, number>>(new Map());
   const answersRef = useRef(answers);
   answersRef.current = answers;
-  const [result, setResult] = useState<PersonalityResult | null>(null);
+  const [result, setResult] = useState<T | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [started, setStarted] = useState(false);
 
-  const pages = useMemo(() => paginateQuestions(ITEMS_PER_PAGE), []);
+  const pages = useMemo(
+    () => paginateGeneric(config.questions, config.itemsPerPage),
+    [config.questions, config.itemsPerPage],
+  );
   const totalPages = pages.length;
 
   const currentQuestions = pages[currentPage] || [];
   const allAnswered = currentQuestions.every(q => answers.has(q.id));
 
-  const progress = Math.round(
-    ((currentPage + (allAnswered ? 1 : 0)) / totalPages) * 100,
-  );
+  const progress = totalPages > 0
+    ? Math.round(((currentPage + (allAnswered ? 1 : 0)) / totalPages) * 100)
+    : 0;
 
   const handleAnswer = useCallback((questionId: string, score: number) => {
     setAnswers(prev => {
@@ -60,7 +60,7 @@ export default function QuizEngine() {
   };
 
   const handleSubmit = () => {
-    const res = computeResults(answers);
+    const res = computeResult(answers);
     setResult(res);
     setShowConfirm(false);
   };
@@ -71,7 +71,9 @@ export default function QuizEngine() {
       if (result) return;
       const num = parseInt(e.key);
       if (num < 1 || num > 7) return;
-      const unanswered = currentQuestions.filter(q => !answersRef.current.has(q.id));
+      const unanswered = currentQuestions.filter(
+        q => !answersRef.current.has(q.id),
+      );
       if (unanswered.length === 1) {
         handleAnswer(unanswered[0].id, num);
       }
@@ -83,14 +85,15 @@ export default function QuizEngine() {
   // Pass results
   useEffect(() => {
     if (result) {
-      // Store in sessionStorage for the results page
-      sessionStorage.setItem('bigfive_result', JSON.stringify(result));
-      window.location.href = `${import.meta.env.BASE_URL}results`;
+      sessionStorage.setItem(config.resultKey, JSON.stringify(result));
+      window.location.href = config.resultUrl;
     }
-  }, [result]);
+  }, [result, config.resultKey, config.resultUrl]);
 
   if (!started) {
-    return <StartScreen onStart={() => setStarted(true)} />;
+    return (
+      <StartScreen config={config.startScreen} onStart={() => setStarted(true)} />
+    );
   }
 
   if (result) {
@@ -107,9 +110,7 @@ export default function QuizEngine() {
       {/* Header */}
       <div className="card">
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-lg font-bold text-gray-800">
-            大五人格测评
-          </h1>
+          <h1 className="text-lg font-bold text-gray-800">{config.title}</h1>
           <span className="text-sm text-gray-400">
             {currentPage + 1} / {totalPages} 页
           </span>
@@ -123,14 +124,14 @@ export default function QuizEngine() {
           <div key={q.id} className="card">
             <div className="flex items-start gap-3">
               <span className="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-700 rounded-lg flex items-center justify-center text-sm font-bold">
-                {currentPage * ITEMS_PER_PAGE + idx + 1}
+                {currentPage * config.itemsPerPage + idx + 1}
               </span>
               <div className="flex-1">
                 <p className="text-gray-800 leading-relaxed mb-4">{q.text}</p>
                 <LikertScale
-                  labels={LIKERT_LABELS}
+                  labels={config.likertLabels}
                   value={answers.get(q.id) ?? null}
-                  onChange={(v) => handleAnswer(q.id, v)}
+                  onChange={v => handleAnswer(q.id, v)}
                 />
               </div>
             </div>
@@ -170,7 +171,7 @@ export default function QuizEngine() {
           <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
             <h3 className="text-xl font-bold mb-3">确认提交？</h3>
             <p className="text-gray-600 mb-6 leading-relaxed">
-              您已完成全部 <strong>{questions.length}</strong> 道题目。
+              您已完成全部 <strong>{config.questions.length}</strong> 道题目。
               提交后将无法修改答案，确定要提交吗？
             </p>
             <div className="flex gap-3">
@@ -194,40 +195,48 @@ export default function QuizEngine() {
   );
 }
 
-function StartScreen({ onStart }: { onStart: () => void }) {
+function StartScreen({
+  config,
+  onStart,
+}: {
+  config: QuizConfig['startScreen'];
+  onStart: () => void;
+}) {
   return (
     <div className="card text-center py-12 space-y-6">
-      <div className="text-6xl">🧠</div>
-      <h1 className="text-3xl font-bold text-gray-900">大五人格科学测评</h1>
+      <div className="text-6xl">{config.emoji}</div>
+      <h1 className="text-3xl font-bold text-gray-900">{config.title}</h1>
+      {config.description && (
+        <p className="text-gray-500 max-w-md mx-auto">{config.description}</p>
+      )}
       <div className="max-w-md mx-auto text-gray-600 space-y-3 text-left">
-        <div className="flex items-start gap-3">
-          <span className="text-green-500 mt-0.5">✓</span>
-          <span>基于国际公认的 <strong>IPIP-NEO-120</strong> 科学量表</span>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-500 mt-0.5">✓</span>
-          <span>共 <strong>140</strong> 道题目，预计耗时 <strong>15-20 分钟</strong></span>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-500 mt-0.5">✓</span>
-          <span>采用 <strong>7 点李克特量表</strong>，精准捕捉人格特质</span>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-500 mt-0.5">✓</span>
-          <span>内置一致性检验，确保结果真实可靠</span>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-500 mt-0.5">✓</span>
-          <span>即时生成 <strong>多维度深度分析报告</strong></span>
-        </div>
+        {config.features.map((f, i) => (
+          <div key={i} className="flex items-start gap-3">
+            <span className="text-green-500 mt-0.5">✓</span>
+            <span>{f}</span>
+          </div>
+        ))}
       </div>
       <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 max-w-md mx-auto text-sm text-yellow-800">
-        💡 <strong>提示：</strong>请在一个安静的环境中，根据您的<strong>真实感受</strong>（而非理想中的自己）诚实作答。
-        没有「正确」或「错误」的答案。
+        💡 <strong>提示：</strong>{config.tip}
       </div>
       <button onClick={onStart} className="btn-primary text-lg px-10 py-4">
         开始测评
       </button>
     </div>
   );
+}
+
+/** Fisher-Yates shuffle + paginate */
+function paginateGeneric<T>(items: T[], perPage: number): T[][] {
+  const shuffled = [...items];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  const pages: T[][] = [];
+  for (let i = 0; i < shuffled.length; i += perPage) {
+    pages.push(shuffled.slice(i, i + perPage));
+  }
+  return pages;
 }

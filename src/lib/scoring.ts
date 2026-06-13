@@ -48,36 +48,29 @@ function consistencyCheck(answers: Map<string, number>): {
   totalPairs: number;
   message: string;
 } {
-  const pairs = new Map<string, { qA: Question; qB: Question }>();
+  // Gather pair items: pairId → [firstItem, secondItem]
+  const pairItems = new Map<string, Question[]>();
   for (const q of questions) {
     if (!q.pairId) continue;
-    const existing = pairs.get(q.pairId);
-    if (existing) {
-      const scoreA = answers.get(existing.qA.id);
-      const scoreB = answers.get(q.id);
-      if (scoreA != null && scoreB != null) {
-        const diff = Math.abs(
-          itemScore(existing.qA, scoreA) - itemScore(q, scoreB),
-        );
-        if (diff >= 3) {
-          // Flag this pair as inconsistent
-          const flagged = pairs.get('__flagged__' + q.pairId);
-          if (!flagged) {
-            pairs.set('__flagged__' + q.pairId, { qA: existing.qA, qB: q });
-          }
-        }
-      }
-    } else {
-      pairs.set(q.pairId, { qA: q, qB: null! });
-    }
+    const items = pairItems.get(q.pairId) || [];
+    items.push(q);
+    pairItems.set(q.pairId, items);
   }
 
   let inconsistentPairs = 0;
-  for (const [key] of pairs) {
-    if (key.startsWith('__flagged__')) inconsistentPairs++;
+  for (const [, items] of pairItems) {
+    if (items.length < 2) continue;
+    const [qA, qB] = items;
+    const scoreA = answers.get(qA.id);
+    const scoreB = answers.get(qB.id);
+    if (scoreA == null || scoreB == null) continue;
+    const diff = Math.abs(itemScore(qA, scoreA) - itemScore(qB, scoreB));
+    if (diff >= 3) {
+      inconsistentPairs++;
+    }
   }
 
-  const totalPairs = 10;
+  const totalPairs = pairItems.size;
   const passed = inconsistentPairs <= 3;
 
   let message: string;

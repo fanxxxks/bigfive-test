@@ -11,7 +11,10 @@ export default function ResultsReport() {
     const stored = sessionStorage.getItem('bigfive_result');
     if (stored) {
       try {
-        setResult(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (parsed && Array.isArray(parsed.domains) && parsed.domains.length > 0) {
+          setResult(parsed);
+        }
       } catch {
         // ignore
       }

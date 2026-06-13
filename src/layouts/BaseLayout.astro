@@ -14,10 +14,10 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} — 大五人格科学测评</title>
+    <title>{title} — 自我探索平台</title>
     <meta
       name="description"
-      content={description || '基于 IPIP-NEO-120 国际权威量表的专业大五人格（OCEAN）科学测评，提供多维度人格分析与个性化成长建议。'}
+      content={description || '集成式自我探索平台——大五人格、哲学气质、核心价值观、依恋风格等多维度科学测评。'}
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,6 +27,22 @@ const { title, description } = Astro.props;
     />
   </head>
   <body>
+    <!-- Global Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <a href={`${import.meta.env.BASE_URL}`} class="flex items-center gap-2 font-bold text-gray-800 hover:text-primary-600 transition-colors">
+          <span class="text-xl">🧠</span>
+          <span class="hidden sm:inline">自我探索平台</span>
+        </a>
+        <div class="flex items-center gap-1 sm:gap-3 text-xs sm:text-sm">
+          <a href={`${import.meta.env.BASE_URL}quiz`} class="px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">完整版大五</a>
+          <a href={`${import.meta.env.BASE_URL}short`} class="px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">简洁版大五</a>
+          <a href={`${import.meta.env.BASE_URL}philosophy`} class="px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">哲学气质</a>
+          <a href={`${import.meta.env.BASE_URL}values`} class="hidden md:inline px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">核心价值观</a>
+          <a href={`${import.meta.env.BASE_URL}attachment`} class="hidden md:inline px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">依恋风格</a>
+        </div>
+      </div>
+    </nav>
     <slot />
   </body>
 </html>

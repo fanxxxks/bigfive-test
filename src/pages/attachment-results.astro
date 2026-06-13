@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AttachmentResultsReport from '../components/AttachmentResultsReport';
+---
+
+<BaseLayout title="依恋风格报告" description="您的依恋风格测评报告 — 焦虑与回避维度分析、四种依恋风格匹配度与深度解读。">
+  <main class="min-h-screen bg-gray-50 print:bg-white">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <AttachmentResultsReport client:only="react" />
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  @media print {
+    body { background: white !important; }
+    .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
+    a, button { display: none !important; }
+    .bg-gray-50 { background: white !important; }
+  }
+</style>
