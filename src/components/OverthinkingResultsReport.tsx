@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { OverthinkingResult, OverthinkingStyleScore, OverthinkingDimension } from '../data/overthinkingData';
 import { usePosterDownload } from './PosterDownload';
+import { generateOverthinkingMD, downloadMarkdown } from '../lib/markdownExport';
 
-function downloadMD(r: OverthinkingResult) {
-  const p = r.primary; const lines = ['# 精神内耗指数测评报告', '', `> ${new Date(r.timestamp).toLocaleString('zh-CN')}`, '', `## 内耗等级：${r.levelEmoji} ${r.level}`, '', `综合内耗指数：${r.totalPct}%`, '', '## 5维度分析', ...r.dimensions.map((d: OverthinkingDimension) => `- ${d.emoji} ${d.name}: ${d.percentage}% — ${d.interpretation}`), '', `## 你的内耗类型：${p.emoji} ${p.name}`, '', p.longDescription, '', '## 反内耗策略', ...p.strategies.map((s: string) => `- ${s}`), '', '---', '*本测评仅供个人了解与参考。*'];
-  const blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = '精神内耗指数报告.md'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-}
 
 export default function OverthinkingResultsReport() {
   const [r, setR] = useState<OverthinkingResult | null>(null);
@@ -28,7 +25,7 @@ export default function OverthinkingResultsReport() {
     <div className="card bg-gray-50 border-dashed"><p className="text-xs text-gray-500 text-center">精神内耗指数基于反刍思维和认知行为理论研究。内耗水平是可变的——通过练习和自我觉察，你可以显著降低不必要的精神消耗。</p></div>
     <div className="text-center pb-10"><div className="flex items-center justify-center gap-4 flex-wrap">
       <a href={`${import.meta.env.BASE_URL}overthinking`} className="btn-primary inline-block">重新测评</a>
-      <button onClick={() => downloadMD(r)} className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">📥 下载MD报告</button>
+      <button onClick={() => downloadMarkdown(generateOverthinkingMD(r), '精神内耗指数报告.md')} className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">📥 下载MD报告</button>
       <button onClick={() => downloadPoster({ title: '精神内耗雷达图', subtitle: `${levelEmoji} ${level} · 指数${totalPct}%`, emoji: levelEmoji, highlights: dimensions.map((d: OverthinkingDimension) => ({ label: d.name, value: `${d.percentage}%`, color: d.color })), footer: '自我探索平台 · bigfive-test', timestamp: new Date(r.timestamp).toLocaleString('zh-CN') })} className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200">🎨 生成分享海报</button>
     </div></div>
   </div>);

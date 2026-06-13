@@ -5,6 +5,10 @@ on:
     branches: [master]
   workflow_dispatch:
 
+# Required for peaceiris/actions-gh-pages to write to gh-pages branch
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

@@ -2,32 +2,8 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { BoundaryResult, BoundaryScore } from '../data/boundaryData';
 import { usePosterDownload } from './PosterDownload';
+import { generateBoundaryMD, downloadMarkdown } from '../lib/markdownExport';
 
-function downloadMD(r: BoundaryResult) {
-  const p = r.primary;
-  const lines = [
-    '# 讨好型/不好惹指数测评报告', '',
-    `> 报告生成时间：${new Date(r.timestamp).toLocaleString('zh-CN')}`, '',
-    `## 你的社交边界类型：${p.emoji} ${p.name}`, '',
-    `> "${p.tagline}"`, '',
-    `### 核心数据`,
-    `- 坚定性指数：${r.assertPct}%`,
-    `- 讨好倾向指数：${r.pleasePct}%`, '',
-    `### 各类型匹配度`,
-    ...r.styles.map((s: BoundaryScore) => `- ${s.emoji} ${s.name}: ${s.percentage}%`), '',
-    `## 深度解读`, '', p.longDescription, '',
-    `### 💪 核心优势`, ...p.strengths.map((s: string) => `- ${s}`), '',
-    `### ⚠️ 成长课题`, ...p.challenges.map((c: string) => `- ${c}`), '',
-    `### 🛡️ 边界建立建议`, '', p.boundaryAdvice, '',
-    `### ⚔️ 冲突应对风格`, '', p.conflictStyle, '',
-    `### 💼 职场建议`, '', p.workplaceAdvice, '',
-    '---', '*本测评仅供个人了解与参考，不构成临床诊断。*',
-  ];
-  const blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = '讨好型不好惹指数报告.md';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-}
 
 export default function BoundaryResultsReport() {
   const [r, setR] = useState<BoundaryResult | null>(null);
@@ -125,7 +101,7 @@ export default function BoundaryResultsReport() {
       <div className="text-center pb-10">
         <div className="flex items-center justify-center gap-4 flex-wrap">
           <a href={`${import.meta.env.BASE_URL}boundary`} className="btn-primary inline-block">重新测评</a>
-          <button onClick={() => downloadMD(r)} className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">📥 下载MD报告</button>
+          <button onClick={() => downloadMarkdown(generateBoundaryMD(r), '讨好型不好惹指数报告.md')} className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">📥 下载MD报告</button>
           <button onClick={() => downloadPoster({ title: '社交边界图谱', subtitle: `${primary.emoji} ${primary.name} · ${primary.tagline}`, emoji: primary.emoji, highlights: styles.map((s: BoundaryScore) => ({ label: s.name, value: `${s.percentage}%`, color: s.color })), footer: '自我探索平台 · bigfive-test', timestamp: new Date(r.timestamp).toLocaleString('zh-CN') })} className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200">🎨 生成分享海报</button>
         </div>
       </div>
