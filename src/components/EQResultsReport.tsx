@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-import type { EQResult } from '../lib/eqScoring';
+import type { EQResult, EQLevelMeta } from '../data/eqData';
+import { eqLevels } from '../data/eqData';
+import { generateEQMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function EQResultsReport() {
   const [r, setR] = useState<EQResult | null>(null);
@@ -10,18 +12,101 @@ export default function EQResultsReport() {
   }, []);
   if (!r) return (<div className="text-center py-20"><p className="text-gray-400 text-lg">未找到测评结果。</p><a href={`${import.meta.env.BASE_URL}eq`} className="btn-primary inline-block mt-4">去测评</a></div>);
 
+  const levelMeta: EQLevelMeta | undefined = eqLevels.find(l => l.level === r.level);
+
   return (<div className="space-y-8">
-    <div className="card text-center"><div className="text-5xl mb-4">{r.levelEmoji}</div><h1 className="text-2xl font-bold text-gray-900 mb-2">您的情商EQ报告</h1><div className="text-4xl font-bold text-primary-600 mb-2">{r.totalScore}</div><p className="text-lg text-gray-600 mb-2">{r.level} · EQ综合得分</p><p className="text-sm text-gray-500 max-w-md mx-auto">基于Goleman情商模型的5维度综合评估</p><p className="text-xs text-gray-400 mt-3">报告生成时间：{new Date(r.timestamp).toLocaleString('zh-CN')}</p></div>
+    {/* Header */}
+    <div className="card text-center">
+      <div className="text-5xl mb-4">{r.levelEmoji}</div>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">您的情商EQ报告</h1>
+      <div className="text-4xl font-bold text-primary-600 mb-2">{r.totalScore}</div>
+      <p className="text-lg text-gray-600 mb-2">{r.level} · EQ综合得分</p>
+      <p className="text-sm text-gray-500 max-w-md mx-auto">基于Goleman情商模型的5维度综合评估</p>
+      <p className="text-xs text-gray-400 mt-3">报告生成时间：{new Date(r.timestamp).toLocaleString('zh-CN')}</p>
+    </div>
 
-    <div className="card"><h2 className="text-lg font-bold text-gray-800 mb-4">5维度能力雷达图</h2><div style={{ height: 380 }}><ReactECharts option={radarOpt(r)} style={{ height: '100%' }} /></div></div>
+    {/* Level Interpretation */}
+    {levelMeta && (
+      <div className="card border-l-4 border-primary-500">
+        <h2 className="text-xl font-bold text-gray-900 mb-3">{levelMeta.title}</h2>
+        <p className="text-gray-700 leading-relaxed mb-4">{levelMeta.description}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-green-50 rounded-lg p-4">
+            <h3 className="font-bold text-green-700 text-sm mb-2">✅ 你的优势</h3>
+            <ul className="text-sm space-y-1.5">
+              {levelMeta.strengths.map((s, i) => (
+                <li key={i} className="text-green-800 flex items-start gap-2"><span className="text-green-500">•</span> {s}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-blue-50 rounded-lg p-4">
+            <h3 className="font-bold text-blue-700 text-sm mb-2">🌱 成长方向</h3>
+            <ul className="text-sm space-y-1.5">
+              {levelMeta.growthAreas.map((g, i) => (
+                <li key={i} className="text-blue-800 flex items-start gap-2"><span className="text-blue-500">•</span> {g}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    )}
 
-    <div className="card"><h2 className="text-lg font-bold text-gray-800 mb-4">各维度详细得分</h2><div className="space-y-4">
-      {r.dimensions.map(d => (<div key={d.id}><div className="flex items-center gap-2 mb-1"><span className="text-xl">{d.emoji}</span><span className="font-bold text-sm">{d.name}</span><span className="text-sm ml-auto font-bold" style={{ color: d.color }}>{d.percentage}%</span></div><p className="text-xs text-gray-500 mb-1.5">{d.description}</p><div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full transition-all duration-700" style={{ width: `${d.percentage}%`, backgroundColor: d.color }} /></div></div>))}
-    </div></div>
+    {/* Radar Chart */}
+    <div className="card">
+      <h2 className="text-lg font-bold text-gray-800 mb-4">5维度能力雷达图</h2>
+      <div style={{ height: 380 }}><ReactECharts option={radarOpt(r)} style={{ height: '100%' }} /></div>
+    </div>
 
-    <div className="card bg-blue-50 border-blue-200"><h3 className="font-bold text-blue-800 mb-2">💡 情商提升建议</h3><div className="text-sm text-blue-700 leading-relaxed space-y-2">{suggestions(r).map((s,i) => (<p key={i} className="flex items-start gap-2"><span className="text-blue-400">•</span> {s}</p>))}</div></div>
+    {/* Dimensions Detail */}
+    <div className="card">
+      <h2 className="text-lg font-bold text-gray-800 mb-4">各维度深度分析</h2>
+      <div className="space-y-6">
+        {r.dimensions.map(d => {
+          const level = d.percentage >= 70 ? 'high' : d.percentage >= 40 ? 'moderate' : 'low';
+          const interp = level === 'high' ? d.highInterpretation : level === 'moderate' ? d.moderateInterpretation : d.lowInterpretation;
+          return (
+            <div key={d.id} className="border border-gray-100 rounded-xl p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-3xl">{d.emoji}</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-lg">{d.name}</span>
+                    <span className="text-sm font-bold ml-auto" style={{ color: d.color }}>{d.percentage}%</span>
+                  </div>
+                  <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${d.percentage}%`, backgroundColor: d.color }} />
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed mb-3">{d.longDescription}</p>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-700 leading-relaxed">{interp}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
 
-    <div className="text-center pb-10"><a href={`${import.meta.env.BASE_URL}eq`} className="btn-primary inline-block">重新测评</a></div>
+    {/* Improvement Suggestions */}
+    <div className="card bg-blue-50 border-blue-200">
+      <h3 className="font-bold text-blue-800 mb-2">💡 情商提升建议</h3>
+      <div className="text-sm text-blue-700 leading-relaxed space-y-2">
+        {suggestions(r).map((s, i) => (<p key={i} className="flex items-start gap-2"><span className="text-blue-400">•</span> {s}</p>))}
+      </div>
+    </div>
+
+    <div className="text-center pb-10">
+      <div className="flex items-center justify-center gap-4 flex-wrap">
+        <a href={`${import.meta.env.BASE_URL}eq`} className="btn-primary inline-block">重新测评</a>
+        <button
+          onClick={() => downloadMarkdown(generateEQMD(r), '情商EQ测评报告.md')}
+          className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          📥 下载MD报告
+        </button>
+      </div>
+    </div>
   </div>);
 }
 
@@ -45,5 +130,6 @@ function suggestions(r: EQResult): string[] {
     if (d.id === 'motivation') tips.push('为自己设立具体的、可衡量的小目标（而非模糊的"努力"），每完成一个就给自己一个小奖励。');
   }
   if (tips.length === 0) tips.push('你的情商各方面都比较均衡，继续保持并寻求在优势维度上的精进。');
+  tips.push('📚 推荐阅读：Daniel Goleman《情商》——了解情商的科学基础和系统提升方法。');
   return tips;
 }

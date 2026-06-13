@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { DecisionResult } from '../lib/decisionScoring';
+import { generateDecisionMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function DecisionResultsReport() {
   const [result, setResult] = useState<DecisionResult | null>(null);
@@ -105,7 +106,15 @@ export default function DecisionResultsReport() {
       </div>
 
       <div className="text-center pb-10">
-        <a href={`${import.meta.env.BASE_URL}decision`} className="btn-primary inline-block">重新测评</a>
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <a href={`${import.meta.env.BASE_URL}decision`} className="btn-primary inline-block">重新测评</a>
+          <button
+            onClick={() => downloadMarkdown(generateDecisionMD(result), '决策风格测评报告.md')}
+            className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            📥 下载MD报告
+          </button>
+        </div>
       </div>
     </div>
   );

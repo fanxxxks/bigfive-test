@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { AttachmentResult } from '../lib/attachmentScoring';
 import { attachmentStyles } from '../data/attachmentData';
+import { generateAttachmentMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function AttachmentResultsReport() {
   const [result, setResult] = useState<AttachmentResult | null>(null);
@@ -96,7 +97,7 @@ export default function AttachmentResultsReport() {
         </div>
       </div>
 
-      {/* Main Style Detail */}
+      {/* Main Style Deep Dive */}
       <div className="card" style={{ borderLeftColor: style.color, borderLeftWidth: '5px' }}>
         <div className="flex items-center gap-3 mb-4">
           <span className="text-4xl">{style.emoji}</span>
@@ -105,7 +106,14 @@ export default function AttachmentResultsReport() {
             <p className="text-xs text-gray-400">{style.label}</p>
           </div>
         </div>
-        <p className="text-gray-700 leading-relaxed mb-4">{style.description}</p>
+        <p className="text-gray-700 leading-relaxed mb-4">{style.longDescription || style.description}</p>
+
+        {/* Childhood Roots */}
+        <div className="bg-purple-50 rounded-lg p-4 mb-4">
+          <h4 className="font-bold text-purple-700 text-sm mb-2">🌱 依恋风格的形成</h4>
+          <p className="text-sm text-purple-800 leading-relaxed">{style.childhoodRoots}</p>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div className="bg-green-50 rounded-lg p-4">
             <h4 className="font-bold text-green-700 text-sm mb-2">💪 优势</h4>
@@ -124,9 +132,15 @@ export default function AttachmentResultsReport() {
             </ul>
           </div>
         </div>
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-lg p-4 mb-4">
           <h4 className="font-bold text-gray-700 text-sm mb-2">💕 在亲密关系中</h4>
           <p className="text-sm text-gray-600 leading-relaxed">{style.relationships}</p>
+        </div>
+
+        {/* Change Path */}
+        <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+          <h4 className="font-bold text-blue-700 text-sm mb-2">🛤️ 成长与改变的方向</h4>
+          <p className="text-sm text-blue-800 leading-relaxed">{style.changePath}</p>
         </div>
       </div>
 
@@ -144,7 +158,7 @@ export default function AttachmentResultsReport() {
                 </span>
               )}
             </div>
-            <p className="text-xs text-gray-600 leading-relaxed">{s.description.slice(0, 80)}...</p>
+            <p className="text-xs text-gray-600 leading-relaxed">{s.description}</p>
           </div>
         ))}
       </div>
@@ -155,11 +169,20 @@ export default function AttachmentResultsReport() {
         <p className="text-sm text-blue-700 leading-relaxed">
           依恋风格并非一成不变的性格标签。研究表明，通过自我觉察、安全的关系体验和心理治疗，依恋风格可以在一定程度上发生改变。
           此测评旨在帮助您更好地理解自己在亲密关系中的模式和倾向，而非对您的人格做出终极判断。
+          每个人的依恋经历都是独特的，无论您的风格是什么，都值得被理解和尊重。
         </p>
       </div>
 
       <div className="text-center pb-10">
-        <a href={`${import.meta.env.BASE_URL}attachment`} className="btn-primary inline-block">重新测评</a>
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <a href={`${import.meta.env.BASE_URL}attachment`} className="btn-primary inline-block">重新测评</a>
+          <button
+            onClick={() => downloadMarkdown(generateAttachmentMD(result), '依恋风格测评报告.md')}
+            className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            📥 下载MD报告
+          </button>
+        </div>
       </div>
     </div>
   );

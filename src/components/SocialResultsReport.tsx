@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { SocialResult } from '../lib/socialScoring';
+import { generateSocialMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function SocialResultsReport() {
   const [r, setR] = useState<SocialResult | null>(null);
@@ -17,7 +18,17 @@ export default function SocialResultsReport() {
     <div className="space-y-4"><h2 className="text-lg font-bold text-gray-800">全部社交风格解读</h2>
       {styles.map((s, i) => (<div key={s.id} className="card"><div className="flex items-start gap-4"><div className="flex-shrink-0 text-3xl">{s.emoji}</div><div className="flex-1"><div className="flex items-center gap-2 mb-1"><h3 className="font-bold" style={{ color: s.color }}>#{i + 1} {s.name}</h3><span className="font-bold text-sm" style={{ color: s.color }}>{s.percentage}%</span></div><p className="text-sm text-gray-600 mb-2">{s.description}</p><div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${s.percentage}%`, backgroundColor: s.color }} /></div></div></div></div>))}
     </div>
-    <div className="text-center pb-10"><a href={`${import.meta.env.BASE_URL}social`} className="btn-primary inline-block">重新测评</a></div>
+    <div className="text-center pb-10">
+      <div className="flex items-center justify-center gap-4 flex-wrap">
+        <a href={`${import.meta.env.BASE_URL}social`} className="btn-primary inline-block">重新测评</a>
+        <button
+          onClick={() => downloadMarkdown(generateSocialMD(r), '社交风格测评报告.md')}
+          className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          📥 下载MD报告
+        </button>
+      </div>
+    </div>
   </div>);
 }
 function barOpt(r: SocialResult) { return { tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } }, grid: { left: '3%', right: '10%', containLabel: true }, xAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%', color: '#6b7280' } }, yAxis: { type: 'category', data: r.styles.map(s => `${s.emoji} ${s.name}`), axisLabel: { fontSize: 13, color: '#374151' }, inverse: true }, series: [{ type: 'bar', data: r.styles.map(s => ({ value: s.percentage, itemStyle: { color: s.color, borderRadius: [0, 6, 6, 0] } })), barWidth: 20, label: { show: true, position: 'right', formatter: '{c}%', color: '#6b7280' } }] }; }

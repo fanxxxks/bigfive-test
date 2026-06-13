@@ -12,7 +12,11 @@ export interface ValueScore {
   emoji: string;
   color: string;
   description: string;
+  longDescription: string;
   motto: string;
+  lifeExample: string;
+  compatibleWith: string[];
+  mayConflictWith: string[];
   rawScore: number;
   maxScore: number;
   percentage: number;
@@ -42,7 +46,11 @@ export function computeValuesResults(answers: Map<string, number>): ValuesResult
       emoji: val.emoji,
       color: val.color,
       description: val.description,
+      longDescription: val.longDescription,
       motto: val.motto,
+      lifeExample: val.lifeExample,
+      compatibleWith: val.compatibleWith,
+      mayConflictWith: val.mayConflictWith,
       rawScore,
       maxScore,
       percentage,

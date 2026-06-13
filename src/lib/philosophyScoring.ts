@@ -13,9 +13,11 @@ export interface PhilosophySchoolScore {
   emoji: string;
   color: string;
   description: string;
+  longDescription: string;
   coreIdeas: string[];
   keyQuote: string;
   keyQuoteAuthor: string;
+  lifeImplication: string;
   /** Raw accumulated score */
   rawScore: number;
   /** Normalized percentage (0-100), higher = stronger alignment */
@@ -146,9 +148,11 @@ export function computePhilosophyResults(answers: Map<string, number>): Philosop
       emoji: school.emoji,
       color: school.color,
       description: school.description,
+      longDescription: school.longDescription,
       coreIdeas: school.coreIdeas,
       keyQuote: school.keyQuote,
       keyQuoteAuthor: school.keyQuoteAuthor,
+      lifeImplication: school.lifeImplication,
       rawScore,
       percentage,
     };

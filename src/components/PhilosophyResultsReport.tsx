@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { PhilosophyResult, PhilosophySchoolScore } from '../lib/philosophyScoring';
+import { generatePhilosophyMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function PhilosophyResultsReport() {
   const [result, setResult] = useState<PhilosophyResult | null>(null);
@@ -78,7 +79,7 @@ export default function PhilosophyResultsReport() {
         </div>
       </div>
 
-      {/* Top 5 Detailed */}
+      {/* Top 5 Detailed with long description */}
       <div>
         <h2 className="text-lg font-bold text-gray-800 mb-4">前5流派深度解读</h2>
         <div className="space-y-5">
@@ -100,7 +101,7 @@ export default function PhilosophyResultsReport() {
                     </span>
                   </div>
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    {school.description}
+                    {school.longDescription}
                   </p>
                   <div className="bg-gray-50 rounded-lg p-4 mb-3">
                     <p className="text-sm text-gray-600 italic">
@@ -108,13 +109,17 @@ export default function PhilosophyResultsReport() {
                       <span className="text-xs text-gray-400 ml-1">— {school.keyQuoteAuthor}</span>
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {school.coreIdeas.map((idea, i) => (
                       <span key={i} className="text-xs px-2 py-1 rounded-full"
                         style={{ backgroundColor: school.color + '14', color: school.color }}>
                         {idea}
                       </span>
                     ))}
+                  </div>
+                  <div className="bg-amber-50 rounded-lg p-4 border border-amber-100">
+                    <h4 className="text-xs font-bold text-amber-700 mb-1">🧭 如果这种思想是你的生活指南</h4>
+                    <p className="text-sm text-amber-800 leading-relaxed">{school.lifeImplication}</p>
                   </div>
                 </div>
               </div>
@@ -135,9 +140,17 @@ export default function PhilosophyResultsReport() {
 
       {/* Retake */}
       <div className="text-center pb-10">
-        <a href={`${import.meta.env.BASE_URL}philosophy`} className="btn-primary inline-block">
-          重新测评
-        </a>
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <a href={`${import.meta.env.BASE_URL}philosophy`} className="btn-primary inline-block">
+            重新测评
+          </a>
+          <button
+            onClick={() => downloadMarkdown(generatePhilosophyMD(result), '哲学气质测评报告.md')}
+            className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            📥 下载MD报告
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -151,47 +164,53 @@ function generateSynthesis(top3: PhilosophySchoolScore[]): string {
 
   const syntheses: Record<string, Record<string, string>> = {
     nietzsche: {
-      camus: '尼采的强力意志与加缪的荒诞反抗在您身上交汇——您相信生命虽无外在意义，但人可以通过自我超越和反抗创造价值。您是一个勇敢面对现实、不依赖外在安慰的人。',
-      stoicism: '尼采的力量哲学与斯多葛的内心平静在您身上形成有趣的张力——您既渴望超越和力量，又追求内心的宁静。这种组合使您成为一个既积极进取又不失理性克制的人。',
-      sartre: '尼采的自我超越与萨特的自由选择在您身上融合——您深信人必须自己定义自己的价值，不受传统和他人期待的束缚。您是一个彻底的自我主宰者。',
-      buddhism: '尼采的权力意志与佛学的放下执着形成对比——您内心可能有一种张力：既想超越和征服，又明白执着的痛苦。这种矛盾使您富有深度。',
-      confucius: '尼采的反传统与儒家的伦理秩序形成碰撞——您在独立思考和尊重传统之间寻找自己的平衡点。',
+      camus: '尼采的强力意志与加缪的荒诞反抗在您身上交汇——您相信生命虽无外在意义，但人可以通过自我超越和反抗创造价值。您是一个勇敢面对现实、不依赖外在安慰的人。这种组合赋予您一种"悲剧性的乐观"：您直面人生的艰难，同时选择在其中自我超越。',
+      stoicism: '尼采的力量哲学与斯多葛的内心平静在您身上形成有趣的张力——您既渴望超越和力量，又追求内心的宁静。这种组合使您成为一个既积极进取又不失理性克制的人。这两种思想相互制衡：尼采防止斯多葛退化为消极接受，斯多葛防止尼采滑向不计后果的激进。',
+      sartre: '尼采的自我超越与萨特的自由选择在您身上融合——您深信人必须自己定义自己的价值，不受传统和他人期待的束缚。您是一个彻底的自我主宰者。这两种思想共同构成了"自我创造"的哲学：你的人生是你自己的作品。',
+      buddhism: '尼采的权力意志与佛学的放下执着形成对比——您内心可能有一种张力：既想超越和征服，又明白执着的痛苦。这种矛盾使您富有深度。您可能在行动时充满力量，在反思时又渴望宁静——两种看似矛盾的方向，在您身上可以互补而非冲突。',
+      confucius: '尼采的反传统与儒家的伦理秩序形成碰撞——您在独立思考和尊重传统之间寻找自己的平衡点。您可能在某些领域大胆突破，在另一些领域珍视传承——这种选择性本身就是一种成熟的智慧。',
     },
     camus: {
-      nietzsche: '加缪的荒诞反抗与尼采的强力意志在您身上共鸣——您直面世界的无意义，却选择在荒诞中创造自己的幸福。',
-      sartre: '加缪与萨特共享存在主义根基——世界虚无，但人可以通过行动赋予生活以意义。您是一个活在当下、注重体验的人。',
-      stoicism: '加缪的反抗精神与斯多葛的接纳态度融合——您知道有些事无法改变，但您选择积极面对而非消极接受。',
-      buddhism: '加缪的荒诞与佛学的空性有微妙的呼应——您既认识到世界的虚幻本质，又不愿放弃在此世的积极生活。',
+      nietzsche: '加缪的荒诞反抗与尼采的强力意志在您身上共鸣——您直面世界的无意义，却选择在荒诞中创造自己的幸福。这两种思想共同构成了一种"无宗教的信仰"：不依靠天堂的承诺，只在人间创造意义。',
+      sartre: '加缪与萨特共享存在主义根基——世界虚无，但人可以通过行动赋予生活以意义。您是一个活在当下、注重体验的人。您不太为宏大叙事所动，相信生活的意义在于每一个具体的投入和选择。',
+      stoicism: '加缪的反抗精神与斯多葛的接纳态度融合——您知道有些事无法改变，但您选择积极面对而非消极接受。您区分可控与不可控之事，但对可控之事绝不轻易放弃。',
+      buddhism: '加缪的荒诞与佛学的空性有微妙的呼应——您既认识到世界的虚幻本质，又不愿放弃在此世的积极生活。这种组合使您成为一个"入世的出世人"：看透了，但依然热爱。',
     },
     stoicism: {
-      epicurus: '斯多葛的内心平静与伊壁鸠鲁的简单快乐结合——您追求的不是奢华与刺激，而是内心的安宁和简单生活的满足。',
-      buddhism: '斯多葛与佛学都指向内心的修炼——您相信痛苦的根源在于自己的看法，改变内心就能改变世界。',
-      aristotle: '斯多葛的理性克制与亚里士多德的中道思想互补——您相信德性在于适中，情绪和行为的平衡是幸福的关键。',
+      epicurus: '斯多葛的内心平静与伊壁鸠鲁的简单快乐结合——您追求的不是奢华与刺激，而是内心的安宁和简单生活的满足。您知道真正的幸福不在于拥有更多，而在于需要更少。',
+      buddhism: '斯多葛与佛学都指向内心的修炼——您相信痛苦的根源在于自己的看法，改变内心就能改变世界。这两种东方-西方智慧的融合使您拥有强大的心理韧性。',
+      aristotle: '斯多葛的理性克制与亚里士多德的中道思想互补——您相信德性在于适中，情绪和行为的平衡是幸福的关键。您不是一个极端主义者，而是生活的炼金师——将各种元素混合到恰到好处的比例。',
     },
     sartre: {
-      marx: '萨特的个体自由与马克思的社会分析结合——您既重视个人的选择自由，又清醒地看到社会结构对个体的制约。',
-      camus: '萨特与加缪——存在主义的两翼。您深深理解人的自由和世界的荒诞，在虚无中寻找属于自己的意义。',
+      marx: '萨特的个体自由与马克思的社会分析结合——您既重视个人的选择自由，又清醒地看到社会结构对个体的制约。您是一个"现实的理想主义者"：不否认结构的不公，但坚持个体的能动性。',
+      camus: '萨特与加缪——存在主义的两翼。您深深理解人的自由和世界的荒诞，在虚无中寻找属于自己的意义。您可能是朋友圈中那个最常质疑"这有什么意义"但也最认真地生活的人。',
     },
     buddhism: {
-      laozi: '佛学与道家在您身上交汇——放下执着，顺应自然，不争而胜。您的气质中有一种东方式的宁静和智慧。',
-      schopenhauer: '佛学的解脱观与叔本华的悲观主义共鸣——您对人生的痛苦有深刻的体认，但您选择以放下而非绝望来应对。',
-      zhuangzi: '佛学的空性与庄子的齐物在您身上融合——您看破二元对立，在超脱中寻找精神的自由。',
+      laozi: '佛学与道家在您身上交汇——放下执着，顺应自然，不争而胜。您的气质中有一种东方式的宁静和智慧。您知道什么时候该行动，什么时候该"无为"，这种判断力是您最宝贵的智慧。',
+      schopenhauer: '佛学的解脱观与叔本华的悲观主义共鸣——您对人生的痛苦有深刻的体认，但您选择以放下而非绝望来应对。您看到了黑暗，但选择点亮心中的灯，而非诅咒黑暗。',
+      zhuangzi: '佛学的空性与庄子的齐物在您身上融合——您看破二元对立，在超脱中寻找精神的自由。您不太被"对错""成败"的二分法所困，能够从更高的维度理解和接纳。',
     },
     confucius: {
-      aristotle: '儒家与亚里士多德的中道思想不谋而合——您重视德性修养，相信在具体的人际关系和社会角色中实现自我。',
-      wangyangming: '儒家与心学一脉相承——您既重视外在的礼仪规范，又相信内心的良知是最终的判断标准。',
+      aristotle: '儒家与亚里士多德的中道思想不谋而合——您重视德性修养，相信在具体的人际关系和社会角色中实现自我。东方和西方最伟大的德性伦理传统在您身上汇合。',
+      wangyangming: '儒家与心学一脉相承——您既重视外在的礼仪规范，又相信内心的良知是最终的判断标准。外礼内仁，知行合一，这是您的人格底色。',
     },
     laozi: {
-      zhuangzi: '老子与庄子——道家的完整传承。您的气质中有一种天然的洒脱和智慧，不争不抢，顺应本心。',
-      buddhism: '道家与佛学的融合——无为与放下，自然与空性，您的气质体现了东方哲学的精髓。',
+      zhuangzi: '老子与庄子——道家的完整传承。您的气质中有一种天然的洒脱和智慧，不争不抢，顺应本心。您是人群中最不显眼但最从容的那个——水善利万物而不争，说的就是您。',
+      buddhism: '道家与佛学的融合——无为与放下，自然与空性，您的气质体现了东方哲学的精髓。这种融合使您既超脱又慈悲，既有智慧又有温度。',
     },
     marx: {
-      sartre: '马克思的实践哲学与萨特的行动哲学结合——您不满足于解释世界，您要改变它，无论是社会还是自身。',
-      utilitarianism: '马克思的集体关怀与功利主义的幸福计算有共同之处——您关心最大多数人的福祉，注重实际结果。',
+      sartre: '马克思的实践哲学与萨特的行动哲学结合——您不满足于解释世界，您要改变它，无论是社会还是自身。您是行动派的思想家——思考的目的是为了改变，而非止于理解。',
+      utilitarianism: '马克思的集体关怀与功利主义的幸福计算有共同之处——您关心最大多数人的福祉，注重实际结果。您的理想主义是务实的：关注的是"什么真正有效"而非"什么听起来最好"。',
     },
     kant: {
-      stoicism: '康德的道德理性与斯多葛的内在修炼结合——您相信通过理性可以找到正确的行动准则，并以此指导人生。',
-      aristotle: '康德的义务论与亚里士多德的德性伦理互补——您既重视原则，也重视在具体情境中的判断。',
+      stoicism: '康德的道德理性与斯多葛的内在修炼结合——您相信通过理性可以找到正确的行动准则，并以此指导人生。这种组合使您成为一个具有原则性但不失弹性的道德行动者。',
+      aristotle: '康德的义务论与亚里士多德的德性伦理互补——您既重视原则，也重视在具体情境中的判断。您不是一个"照搬规则"的人，而是在原则的指导下灵活地应对生活。',
+    },
+    zhuangzi: {
+      nietzsche: '庄子的逍遥与尼采的自我超越在您身上形成奇妙的交响——东方和西方最具颠覆性的思想在您身上相遇。您既不被传统束缚，也不被现代性裹挟——您是真正的自由思想者。',
+    },
+    epicurus: {
+      stoicism: '伊壁鸠鲁的宁静快乐与斯多葛的内心理性结合——您知道幸福不在于外界拥有多少，而在于内心如何感受。您是一个在简朴中找到丰富、在安静中找到力量的人。',
     },
   };
 
@@ -199,7 +218,7 @@ function generateSynthesis(top3: PhilosophySchoolScore[]): string {
 
   if (synth) return synth;
 
-  return `您的哲学气质以<strong>${first.name}</strong>（${first.percentage}%）、<strong>${second.name}</strong>（${second.percentage}%）${third ? `和<strong>${third.name}</strong>（${third.percentage}%）` : ''}为主要特征。${third ? '这三种思想在您身上并非矛盾，而是构成了您独特的世界观——一种融合了多种智慧的个人哲学。这种多元性本身就是一种力量：您能够在不同情境下灵活运用不同的思想资源，而非局限于单一教条。' : '您的哲学气质较为集中，这使您有一个清晰而一致的思想内核，在面对复杂问题时能够从稳定的哲学立场出发做出判断。'}`;
+  return `您的哲学气质以<strong>${first.name}</strong>（${first.percentage}%）、<strong>${second.name}</strong>（${second.percentage}%）${third ? `和<strong>${third.name}</strong>（${third.percentage}%）` : ''}为主要特征。${third ? '这三种思想在您身上并非矛盾，而是构成了您独特的世界观——一种融合了多种智慧的个人哲学。这种多元性本身就是一种力量：您能够在不同情境下灵活运用不同的思想资源，而非局限于单一教条。您是一个"哲学上的世界公民"——不归属于任何一个思想阵营，却能在各种智慧传统中汲取营养。' : '您的哲学气质较为集中，这使您有一个清晰而一致的思想内核，在面对复杂问题时能够从稳定的哲学立场出发做出判断。'}`;
 }
 
 function buildBarOption(result: PhilosophyResult) {

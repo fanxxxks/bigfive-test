@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { PersonalityResult, DomainScore } from '../lib/types';
 import { generateReport } from '../lib/reportText';
+import { generateBigFiveMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function ResultsReport() {
   const [result, setResult] = useState<PersonalityResult | null>(null);
@@ -247,9 +248,17 @@ export default function ResultsReport() {
 
       {/* Retake */}
       <div className="text-center pb-10">
-        <a href={`${import.meta.env.BASE_URL}quiz`} className="btn-primary inline-block">
-          重新测评
-        </a>
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <a href={`${import.meta.env.BASE_URL}quiz`} className="btn-primary inline-block">
+            重新测评
+          </a>
+          <button
+            onClick={() => downloadMarkdown(generateBigFiveMD(result), '大五人格测评报告.md')}
+            className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            📥 下载MD报告
+          </button>
+        </div>
         <p className="text-xs text-gray-400 mt-2">
           提示：人格具有一定的稳定性，短期内多次测评结果应大致相似。
         </p>

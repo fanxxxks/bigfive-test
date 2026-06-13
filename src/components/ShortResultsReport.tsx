@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { PersonalityResult } from '../lib/types';
 import { generateReport } from '../lib/reportText';
+import { generateShortMD, downloadMarkdown } from '../lib/markdownExport';
 
 export default function ShortResultsReport() {
   const [result, setResult] = useState<PersonalityResult | null>(null);
@@ -152,7 +153,15 @@ export default function ShortResultsReport() {
 
       {/* Retake */}
       <div className="text-center pb-10 space-y-3">
-        <a href={`${import.meta.env.BASE_URL}short`} className="btn-primary inline-block">重新测评（简洁版）</a>
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <a href={`${import.meta.env.BASE_URL}short`} className="btn-primary inline-block">重新测评（简洁版）</a>
+          <button
+            onClick={() => downloadMarkdown(generateShortMD(result), '大五人格测评报告_简洁版.md')}
+            className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            📥 下载MD报告
+          </button>
+        </div>
         <br />
         <a href={`${import.meta.env.BASE_URL}quiz`} className="text-sm text-primary-600 hover:text-primary-700 underline">
           想要更精准的结果？试试完整版（140题）→
