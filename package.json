@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
-    "build:gh": "cross-env ASTRO_BASE=/bigfive-test/ astro check && astro build",
+    "build:gh": "cross-env ASTRO_BASE=/bigfive-test/ astro check && cross-env ASTRO_BASE=/bigfive-test/ astro build",
     "preview": "astro preview"
   },
   "dependencies": {
