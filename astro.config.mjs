@@ -6,7 +6,6 @@ import tailwindcss from 'tailwindcss';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://fanxxxks.github.io',
-  base: '/bigfive-test/',
   integrations: [react()],
   vite: {
     css: {
