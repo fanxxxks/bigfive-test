@@ -126,9 +126,7 @@ export default function PhilosophyResultsReport() {
       {/* Synthesis */}
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-3">🧩 您的哲学气质合成</h2>
-        <p className="text-gray-700 leading-relaxed">
-          {generateSynthesis(top3)}
-        </p>
+        <p className="text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: generateSynthesis(top3) }} />
         <p className="text-xs text-gray-400 mt-4">
           以上分析基于您在60道哲学观点题上的回答。哲学气质测评旨在帮助您了解自己的思想倾向，不构成任何形式的标签或定论。
           每个人都在不断变化和成长，今天的哲学气质只是您思想旅程中的一个快照。

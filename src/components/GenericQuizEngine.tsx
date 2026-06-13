@@ -213,12 +213,12 @@ function StartScreen({
         {config.features.map((f, i) => (
           <div key={i} className="flex items-start gap-3">
             <span className="text-green-500 mt-0.5">✓</span>
-            <span>{f}</span>
+            <span dangerouslySetInnerHTML={{ __html: f }} />
           </div>
         ))}
       </div>
       <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 max-w-md mx-auto text-sm text-yellow-800">
-        💡 <strong>提示：</strong>{config.tip}
+        💡 <strong>提示：</strong><span dangerouslySetInnerHTML={{ __html: config.tip }} />
       </div>
       <button onClick={onStart} className="btn-primary text-lg px-10 py-4">
         开始测评

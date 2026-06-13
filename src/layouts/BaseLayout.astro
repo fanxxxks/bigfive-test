@@ -34,12 +34,14 @@ const { title, description } = Astro.props;
           <span class="text-xl">🧠</span>
           <span class="hidden sm:inline">自我探索平台</span>
         </a>
-        <div class="flex items-center gap-1 sm:gap-3 text-xs sm:text-sm">
-          <a href={`${import.meta.env.BASE_URL}quiz`} class="px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">完整版大五</a>
-          <a href={`${import.meta.env.BASE_URL}short`} class="px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">简洁版大五</a>
-          <a href={`${import.meta.env.BASE_URL}philosophy`} class="px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">哲学气质</a>
-          <a href={`${import.meta.env.BASE_URL}values`} class="hidden md:inline px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">核心价值观</a>
-          <a href={`${import.meta.env.BASE_URL}attachment`} class="hidden md:inline px-2 sm:px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">依恋风格</a>
+        <div class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm flex-wrap justify-end">
+          <a href={`${import.meta.env.BASE_URL}quiz`} class="px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">大五完整版</a>
+          <a href={`${import.meta.env.BASE_URL}short`} class="px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">大五简洁版</a>
+          <a href={`${import.meta.env.BASE_URL}philosophy`} class="hidden sm:inline px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">哲学气质</a>
+          <a href={`${import.meta.env.BASE_URL}values`} class="hidden sm:inline px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">价值观</a>
+          <a href={`${import.meta.env.BASE_URL}attachment`} class="hidden md:inline px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">依恋风格</a>
+          <a href={`${import.meta.env.BASE_URL}eq`} class="hidden md:inline px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">情商EQ</a>
+          <a href={`${import.meta.env.BASE_URL}animal`} class="hidden lg:inline px-1.5 sm:px-2.5 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors">性格动物</a>
         </div>
       </div>
     </nav>

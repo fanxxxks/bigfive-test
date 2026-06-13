@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="首页"
-  description="集成式自我探索平台——大五人格、哲学气质、核心价值观、依恋风格等科学测评，全方位了解你自己。"
+  description="集成式自我探索平台——大五人格、哲学气质、核心价值观、依恋风格等11大科学测评，全方位了解你自己。"
 >
   <main class="min-h-screen">
     <!-- Hero Section -->
@@ -18,17 +18,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           探索<span class="text-yellow-300">完整的</span>自己
         </h1>
         <p class="text-lg md:text-xl text-primary-100 max-w-2xl mx-auto mb-4 leading-relaxed">
-          5大科学测评，从人格、哲学、价值观到依恋风格，多维度深度认识你自己。
+          11大科学测评，从人格、哲学、价值观、情商到金钱观，多维度深度认识你自己。
         </p>
         <p class="text-sm text-primary-200">全部免费 · 无需注册 · 数据保留在本地浏览器</p>
       </div>
     </section>
 
-    <!-- All Tests Grid -->
-    <section class="max-w-6xl mx-auto px-6 py-16">
-      <h2 class="text-2xl font-bold text-center mb-2">选择一个测评开始探索</h2>
-      <p class="text-gray-500 text-center mb-10 text-sm">点击任意卡片进入测评，所有测评结果即时生成</p>
-
+    <!-- Classic Scientific Tests -->
+    <section class="max-w-6xl mx-auto px-6 pt-16 pb-6">
+      <h2 class="text-xl font-bold text-center mb-2">📋 经典科学测评</h2>
+      <p class="text-gray-500 text-center mb-10 text-sm">基于国际公认心理学量表，科学、严谨、深度</p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Big Five Full -->
         <a href={`${import.meta.env.BASE_URL}quiz`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
@@ -39,9 +38,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <h3 class="font-bold text-lg mb-1">大五人格 · 完整版</h3>
           <p class="text-xs text-gray-400 mb-2">IPIP-NEO-120 国际权威量表</p>
           <p class="text-sm text-gray-600 leading-relaxed mb-3">140题 · 15-20分钟 · 5大维度 + 30子维度深度拆解、雷达图、职场/人际/抗压分析、足球位置匹配</p>
-          <div class="flex items-center gap-2 text-primary-600 font-medium text-sm group-hover:gap-3 transition-all">
-            开始测评 <span>→</span>
-          </div>
+          <div class="flex items-center gap-2 text-primary-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
         </a>
 
         <!-- Big Five Short -->
@@ -53,9 +50,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <h3 class="font-bold text-lg mb-1">大五人格 · 简洁版</h3>
           <p class="text-xs text-gray-400 mb-2">IPIP-50 简版量表</p>
           <p class="text-sm text-gray-600 leading-relaxed mb-3">50题 · 5-8分钟 · 快速勾勒五大维度人格轮廓、雷达图、百分位排名</p>
-          <div class="flex items-center gap-2 text-green-600 font-medium text-sm group-hover:gap-3 transition-all">
-            开始测评 <span>→</span>
-          </div>
+          <div class="flex items-center gap-2 text-green-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
         </a>
 
         <!-- Philosophy -->
@@ -67,9 +62,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <h3 class="font-bold text-lg mb-1">哲学气质测评</h3>
           <p class="text-xs text-gray-400 mb-2">18个东西方哲学流派</p>
           <p class="text-sm text-gray-600 leading-relaxed mb-3">60题 · 8-10分钟 · 尼采、孔子、萨特、庄子…探索你的哲学DNA与思想气质</p>
-          <div class="flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">
-            开始测评 <span>→</span>
-          </div>
+          <div class="flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
         </a>
 
         <!-- Values -->
@@ -80,10 +73,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
           <h3 class="font-bold text-lg mb-1">核心价值观测评</h3>
           <p class="text-xs text-gray-400 mb-2">Schwartz 10种基本价值观</p>
-          <p class="text-sm text-gray-600 leading-relaxed mb-3">40题 · 约5分钟 · 了解驱动你人生选择的核心价值——权力、成就、自主、仁爱…</p>
-          <div class="flex items-center gap-2 text-purple-600 font-medium text-sm group-hover:gap-3 transition-all">
-            开始测评 <span>→</span>
-          </div>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">40题 · 约5分钟 · 基于生活场景，了解驱动你人生选择的核心价值</p>
+          <div class="flex items-center gap-2 text-purple-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
         </a>
 
         <!-- Attachment -->
@@ -95,9 +86,86 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <h3 class="font-bold text-lg mb-1">爱情依恋风格测评</h3>
           <p class="text-xs text-gray-400 mb-2">成人依恋理论 ECR</p>
           <p class="text-sm text-gray-600 leading-relaxed mb-3">36题 · 4-5分钟 · 安全型/焦虑型/回避型/恐惧型——了解你的亲密关系模式</p>
-          <div class="flex items-center gap-2 text-pink-600 font-medium text-sm group-hover:gap-3 transition-all">
-            开始测评 <span>→</span>
+          <div class="flex items-center gap-2 text-pink-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- EQ -->
+        <a href={`${import.meta.env.BASE_URL}eq`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-2xl">🧠</div>
+            <span class="text-xs bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full font-medium">情绪</span>
           </div>
+          <h3 class="font-bold text-lg mb-1">情商EQ测评</h3>
+          <p class="text-xs text-gray-400 mb-2">Goleman 情商模型</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">25题 · 3-5分钟 · 自我觉察、情绪管理、同理心、社交技巧、自我激励五维度分析</p>
+          <div class="flex items-center gap-2 text-teal-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Fun & Practical Tests -->
+    <section class="max-w-6xl mx-auto px-6 pb-6">
+      <h2 class="text-xl font-bold text-center mb-2">🎯 趣味实用测评</h2>
+      <p class="text-gray-500 text-center mb-10 text-sm">有趣又富有洞察力，发现你生活中的另一面</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Spirit Animal -->
+        <a href={`${import.meta.env.BASE_URL}animal`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-2xl">🦁</div>
+            <span class="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full font-medium">趣味</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">性格动物匹配</h3>
+          <p class="text-xs text-gray-400 mb-2">8种动物原型</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">30题 · 3-5分钟 · 狮子、猫头鹰、海豚、狐狸…找到代表你性格的精神动物</p>
+          <div class="flex items-center gap-2 text-orange-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Decision Style -->
+        <a href={`${import.meta.env.BASE_URL}decision`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-2xl">🧭</div>
+            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-medium">成长</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">决策风格测评</h3>
+          <p class="text-xs text-gray-400 mb-2">4种决策模式</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">30题 · 3-5分钟 · 分析型、直觉型、集思广益型、审慎型——你是哪种决策者？</p>
+          <div class="flex items-center gap-2 text-indigo-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Social Style -->
+        <a href={`${import.meta.env.BASE_URL}social`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl">💬</div>
+            <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">人际</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">社交风格测评</h3>
+          <p class="text-xs text-gray-400 mb-2">4种沟通风格</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">30题 · 3-5分钟 · 驱动型、表达型、亲和型、分析型——你的沟通DNA是什么？</p>
+          <div class="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Stress Coping -->
+        <a href={`${import.meta.env.BASE_URL}stress`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl">💪</div>
+            <span class="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-medium">健康</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">压力应对方式测评</h3>
+          <p class="text-xs text-gray-400 mb-2">4种应对模式</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">24题 · 2-3分钟 · 了解你面对压力时的真实反应模式，学会更健康地应对</p>
+          <div class="flex items-center gap-2 text-red-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Money Mindset -->
+        <a href={`${import.meta.env.BASE_URL}money`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center text-2xl">💰</div>
+            <span class="text-xs bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded-full font-medium">财富</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">金钱观念测评</h3>
+          <p class="text-xs text-gray-400 mb-2">5种金钱人格</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">20题 · 2-3分钟 · 储蓄家、享受派、投资者、极简者、分享者——你的金钱DNA</p>
+          <div class="flex items-center gap-2 text-yellow-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
         </a>
 
         <!-- Methods -->
@@ -107,17 +175,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
           <h3 class="font-bold text-lg mb-1">测评方法论</h3>
           <p class="text-xs text-gray-400 mb-2">了解科学依据</p>
-          <p class="text-sm text-gray-600 leading-relaxed mb-3">所有测评的理论基础、量表来源、信效度数据与隐私承诺</p>
-          <div class="flex items-center gap-2 text-gray-600 font-medium text-sm group-hover:gap-3 transition-all">
-            了解更多 <span>→</span>
-          </div>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">所有11个测评的理论基础、量表来源、信效度数据与隐私承诺</p>
+          <div class="flex items-center gap-2 text-gray-600 font-medium text-sm group-hover:gap-3 transition-all">了解更多 <span>→</span></div>
         </a>
       </div>
     </section>
 
     <!-- OCEAN Overview (compact) -->
     <section class="max-w-6xl mx-auto px-6 pb-16">
-      <h2 class="text-2xl font-bold text-center mb-4">大五人格模型（OCEAN）</h2>
+      <h2 class="text-xl font-bold text-center mb-4">大五人格模型（OCEAN）</h2>
       <p class="text-gray-500 text-center mb-8 max-w-2xl mx-auto text-sm">
         大五人格是目前心理学界最广泛接受的人格结构模型，以下五个维度是理解人格的基础。
       </p>

@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MoneyResultsReport from '../components/MoneyResultsReport';
+---
+<BaseLayout title="金钱观念报告" description="您的金钱观念测评报告 — 5种金钱人格排序与深度解读。">
+  <main class="min-h-screen bg-gray-50 print:bg-white"><div class="max-w-4xl mx-auto px-4 py-8"><MoneyResultsReport client:only="react" /></div></main>
+</BaseLayout>
+<style is:global>
+  @media print { body { background: white !important; } .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; } a, button { display: none !important; } .bg-gray-50 { background: white !important; } }
+</style>

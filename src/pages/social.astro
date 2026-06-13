@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialQuizEngine from '../components/SocialQuizEngine';
+---
+<BaseLayout title="社交风格测评" description="30道题了解你的社交风格——驱动型、表达型、亲和型还是分析型？">
+  <main class="min-h-screen bg-gray-50"><div class="max-w-3xl mx-auto px-4 py-8"><SocialQuizEngine client:load /></div></main>
+</BaseLayout>

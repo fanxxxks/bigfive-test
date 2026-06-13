@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StressQuizEngine from '../components/StressQuizEngine';
+---
+<BaseLayout title="压力应对方式测评" description="24道题了解你的压力应对模式——问题解决型、情绪调节型、寻求支持型还是回避拖延型？">
+  <main class="min-h-screen bg-gray-50"><div class="max-w-3xl mx-auto px-4 py-8"><StressQuizEngine client:load /></div></main>
+</BaseLayout>

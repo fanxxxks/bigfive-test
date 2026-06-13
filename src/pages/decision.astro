@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DecisionQuizEngine from '../components/DecisionQuizEngine';
+---
+
+<BaseLayout title="决策风格测评" description="30道题探索你的决策风格——分析型、直觉型、集思广益型还是审慎观望型？了解自己的决策模式，做出更好的人生选择。">
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+      <DecisionQuizEngine client:load />
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EQQuizEngine from '../components/EQQuizEngine';
+---
+<BaseLayout title="情商EQ测评" description="25道题评估你的情商五个维度——自我觉察、情绪管理、同理心、社交技巧、自我激励。">
+  <main class="min-h-screen bg-gray-50"><div class="max-w-3xl mx-auto px-4 py-8"><EQQuizEngine client:load /></div></main>
+</BaseLayout>

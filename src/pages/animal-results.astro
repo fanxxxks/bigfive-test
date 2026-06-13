@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AnimalResultsReport from '../components/AnimalResultsReport';
+---
+<BaseLayout title="性格动物匹配报告" description="你的精神动物是什么？8种动物原型匹配度分析与深度解读。">
+  <main class="min-h-screen bg-gray-50 print:bg-white"><div class="max-w-4xl mx-auto px-4 py-8"><AnimalResultsReport client:only="react" /></div></main>
+</BaseLayout>
+<style is:global>
+  @media print { body { background: white !important; } .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; } a, button { display: none !important; } .bg-gray-50 { background: white !important; } }
+</style>

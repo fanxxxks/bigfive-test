@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EQResultsReport from '../components/EQResultsReport';
+---
+<BaseLayout title="情商EQ报告" description="您的情商测评报告 — 5维度雷达图、总分等级与改善建议。">
+  <main class="min-h-screen bg-gray-50 print:bg-white"><div class="max-w-4xl mx-auto px-4 py-8"><EQResultsReport client:only="react" /></div></main>
+</BaseLayout>
+<style is:global>
+  @media print { body { background: white !important; } .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; } a, button { display: none !important; } .bg-gray-50 { background: white !important; } }
+</style>

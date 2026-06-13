@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialResultsReport from '../components/SocialResultsReport';
+---
+<BaseLayout title="社交风格报告" description="您的社交风格测评报告 — 4种沟通风格排序与深度解读。">
+  <main class="min-h-screen bg-gray-50 print:bg-white"><div class="max-w-4xl mx-auto px-4 py-8"><SocialResultsReport client:only="react" /></div></main>
+</BaseLayout>
+<style is:global>
+  @media print { body { background: white !important; } .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; } a, button { display: none !important; } .bg-gray-50 { background: white !important; } }
+</style>

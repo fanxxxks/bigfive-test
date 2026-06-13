@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AnimalQuizEngine from '../components/AnimalQuizEngine';
+---
+<BaseLayout title="性格动物匹配" description="30道题找到你的精神动物——狮子、猫头鹰、海豚、狐狸、熊、鹿、鹰、狼，你属于哪一种？">
+  <main class="min-h-screen bg-gray-50"><div class="max-w-3xl mx-auto px-4 py-8"><AnimalQuizEngine client:load /></div></main>
+</BaseLayout>
