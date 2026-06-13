@@ -81,7 +81,7 @@ export default function QuizEngine() {
     if (result) {
       // Store in sessionStorage for the results page
       sessionStorage.setItem('bigfive_result', JSON.stringify(result));
-      window.location.href = '/results';
+      window.location.href = `${import.meta.env.BASE_URL}results`;
     }
   }, [result]);
 
