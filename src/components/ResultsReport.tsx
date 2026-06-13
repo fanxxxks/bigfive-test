@@ -22,7 +22,7 @@ export default function ResultsReport() {
     return (
       <div className="text-center py-20">
         <p className="text-gray-400 text-lg">未找到测评结果。</p>
-        <a href="/quiz" className="btn-primary inline-block mt-4">去测评</a>
+        <a href={`${import.meta.env.BASE_URL}quiz`} className="btn-primary inline-block mt-4">去测评</a>
       </div>
     );
   }
@@ -244,7 +244,7 @@ export default function ResultsReport() {
 
       {/* Retake */}
       <div className="text-center pb-10">
-        <a href="/quiz" className="btn-primary inline-block">
+        <a href={`${import.meta.env.BASE_URL}quiz`} className="btn-primary inline-block">
           重新测评
         </a>
         <p className="text-xs text-gray-400 mt-2">

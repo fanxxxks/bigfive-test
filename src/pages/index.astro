@@ -22,7 +22,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           提供专业、详尽的个性化分析报告与成长建议。
         </p>
         <a
-          href="/quiz"
+          href={`${import.meta.env.BASE_URL}quiz`}
           class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-xl font-bold text-lg
                  hover:bg-yellow-300 hover:text-primary-900 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
         >
@@ -129,7 +129,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2 class="text-3xl font-bold mb-4">准备好了吗？</h2>
         <p class="text-primary-100 mb-8">开启一段深入了解自己的旅程，发现你的独特人格密码。</p>
         <a
-          href="/quiz"
+          href={`${import.meta.env.BASE_URL}quiz`}
           class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-xl font-bold text-lg
                  hover:bg-yellow-300 hover:text-primary-900 transition-all shadow-lg"
         >
@@ -143,7 +143,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="max-w-4xl mx-auto px-6 space-y-2">
         <p>基于 IPIP-NEO-120 国际人格题库 | 本测试仅供个人了解与参考，不构成临床诊断</p>
         <p>
-          <a href="/methods" class="hover:text-white underline underline-offset-2">测评方法论</a>
+          <a href={`${import.meta.env.BASE_URL}methods`} class="hover:text-white underline underline-offset-2">测评方法论</a>
           <span class="mx-3">·</span>
           <span>&copy; {new Date().getFullYear()} Big Five Personality Test</span>
         </p>
