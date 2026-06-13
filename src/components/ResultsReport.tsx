@@ -3,10 +3,12 @@ import ReactECharts from 'echarts-for-react';
 import type { PersonalityResult, DomainScore } from '../lib/types';
 import { generateReport } from '../lib/reportText';
 import { generateBigFiveMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function ResultsReport() {
   const [result, setResult] = useState<PersonalityResult | null>(null);
   const [showFacets, setShowFacets] = useState(false);
+  const { chartRef, downloadPoster } = usePosterDownload('大五人格雷达图.png');
 
   useEffect(() => {
     const stored = sessionStorage.getItem('bigfive_result');
@@ -73,7 +75,7 @@ export default function ResultsReport() {
           </button>
         </div>
         <div className="w-full" style={{ height: showFacets ? 550 : 400 }}>
-          <ReactECharts option={buildRadarOption(result, showFacets)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildRadarOption(result, showFacets)} style={{ height: '100%' }} />
         </div>
       </div>
 
@@ -257,6 +259,23 @@ export default function ResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '大五人格雷达图',
+              subtitle: 'Big Five Personality · 完整版',
+              emoji: '🧠',
+              highlights: result.domains.map(d => ({
+                label: d.name,
+                value: `${d.percentile}%`,
+                color: d.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
         <p className="text-xs text-gray-400 mt-2">

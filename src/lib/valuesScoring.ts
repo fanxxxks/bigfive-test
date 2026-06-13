@@ -1,4 +1,4 @@
-import { valuesList } from '../data/valuesData';
+import { valuesList, type ValueItem } from '../data/valuesData';
 import { valuesQuestions } from '../data/valuesQuestions';
 
 export interface ValuesResult {
@@ -6,17 +6,7 @@ export interface ValuesResult {
   timestamp: number;
 }
 
-export interface ValueScore {
-  id: string;
-  name: string;
-  emoji: string;
-  color: string;
-  description: string;
-  longDescription: string;
-  motto: string;
-  lifeExample: string;
-  compatibleWith: string[];
-  mayConflictWith: string[];
+export interface ValueScore extends ValueItem {
   rawScore: number;
   maxScore: number;
   percentage: number;

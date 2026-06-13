@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProcrastinationResultsReport from '../components/ProcrastinationResultsReport';
+---
+
+<BaseLayout
+  title="拖延症类型报告"
+  description="你的拖延症类型鉴定报告——5维度雷达图、四种拖延类型匹配度与个性化反拖延策略。"
+>
+  <main class="min-h-screen bg-gray-50 print:bg-white">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <ProcrastinationResultsReport client:only="react" />
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  @media print { body { background: white !important; } .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; } a, button { display: none !important; } .bg-gray-50 { background: white !important; } }
+</style>

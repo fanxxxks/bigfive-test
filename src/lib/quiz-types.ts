@@ -30,7 +30,4 @@ export interface StartScreenConfig {
   tip: string;
 }
 
-/** Generic result that all quiz results extend */
-export interface BaseResult {
-  timestamp: number;
-}
+

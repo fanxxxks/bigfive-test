@@ -2,28 +2,28 @@ import type { DomainScore, PersonalityResult } from './types';
 import { domainMeta } from '../data/domainMeta';
 import { domainNorms, scoreToPercentile, getLevel } from '../data/norms';
 import { shortQuestions } from '../data/shortQuestions';
+import { itemScore } from './scoring';
 
-// Full version: 24 items per domain, Short version: 10 items per domain
+// Full version: 24 items per domain, Short version: 10 items per domain.
+// Scale short-version raw scores to full-version equivalent for norm comparison.
+// NOTE: DomainScore.rawScore holds the *scaled* value here (not the literal item sum),
+// because short-version scores must be projected to full-version range for percentile lookups.
 const SCALE_RATIO = 24 / 10; // 2.4
-
-function itemScore(reverse: boolean, answer: number): number {
-  return reverse ? 8 - answer : answer;
-}
 
 export function computeShortResults(answersMap: Map<string, number>): PersonalityResult {
   const domains: DomainScore[] = domainMeta.map(dm => {
     const dqs = shortQuestions.filter(q => q.domain === dm.key);
-    let rawScore = 0;
+    let literalRawScore = 0;
     for (const q of dqs) {
       const answer = answersMap.get(q.id);
       if (answer != null) {
-        rawScore += itemScore(q.reverse, answer);
+        literalRawScore += itemScore(q.reverse, answer);
       }
     }
     const maxScore = dqs.length * 7;
 
     // Scale to full-version equivalent for norm comparison
-    const scaledScore = rawScore * SCALE_RATIO;
+    const scaledScore = literalRawScore * SCALE_RATIO;
     const scaledMax = maxScore * SCALE_RATIO;
     const norm = domainNorms[dm.key];
     const percentile = norm ? scoreToPercentile(scaledScore, norm) : 50;
@@ -34,7 +34,7 @@ export function computeShortResults(answersMap: Map<string, number>): Personalit
       name: dm.name,
       label: dm.label,
       color: dm.color,
-      rawScore: Math.round(scaledScore),
+      rawScore: Math.round(scaledScore), // scaled to full-version equivalent
       maxScore: Math.round(scaledMax),
       percentile,
       level,

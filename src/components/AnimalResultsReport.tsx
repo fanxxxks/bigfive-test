@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { AnimalResult } from '../lib/animalScoring';
 import { generateAnimalMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function AnimalResultsReport() {
   const [r, setR] = useState<AnimalResult | null>(null);
@@ -12,6 +13,7 @@ export default function AnimalResultsReport() {
   if (!r) return (<div className="text-center py-20"><p className="text-gray-400 text-lg">未找到测评结果。</p><a href={`${import.meta.env.BASE_URL}animal`} className="btn-primary inline-block mt-4">去测评</a></div>);
 
   const { top, animals } = r;
+  const { chartRef, downloadPoster } = usePosterDownload('性格动物雷达图.png');
   return (
     <div className="space-y-8">
       {/* Hero */}
@@ -71,7 +73,7 @@ export default function AnimalResultsReport() {
       {/* Bar Chart */}
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-4">8种动物完整匹配度</h2>
-        <div style={{ height: 420 }}><ReactECharts option={barOption(r)} style={{ height: '100%' }} /></div>
+        <div style={{ height: 420 }}><ReactECharts ref={chartRef} option={barOption(r)} style={{ height: '100%' }} /></div>
       </div>
 
       {/* All Animals */}
@@ -113,6 +115,23 @@ export default function AnimalResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '性格动物图谱',
+              subtitle: `${top.emoji} ${top.name} · ${top.tagline}`,
+              emoji: top.emoji,
+              highlights: animals.slice(0, 5).map(a => ({
+                label: a.name,
+                value: `${a.percentage}%`,
+                color: a.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(r.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
       </div>

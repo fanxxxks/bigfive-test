@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MeritocracyQuizEngine from '../components/MeritocracyQuizEngine';
+---
+
+<BaseLayout
+  title="优绩主义程度测评"
+  description="24道题测测你对努力=成功有多相信——你是全靠自己型、清醒奋斗型、佛系躺平型还是矛盾摇摆型？"
+>
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+      <MeritocracyQuizEngine client:load />
+    </div>
+  </main>
+</BaseLayout>

@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="首页"
-  description="集成式自我探索平台——大五人格、哲学气质、核心价值观、依恋风格等11大科学测评，全方位了解你自己。"
+  description="集成式自我探索平台——大五人格、哲学气质、核心价值观、依恋风格等17大科学测评，全方位了解你自己。"
 >
   <main class="min-h-screen">
     <!-- Hero Section -->
@@ -18,7 +18,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           探索<span class="text-yellow-300">完整的</span>自己
         </h1>
         <p class="text-lg md:text-xl text-primary-100 max-w-2xl mx-auto mb-4 leading-relaxed">
-          11大科学测评，从人格、哲学、价值观、情商到金钱观，多维度深度认识你自己。
+          17大科学测评，从人格、哲学、价值观、情商、金钱观到气质、边界、内耗，全方位深度认识你自己。
         </p>
         <p class="text-sm text-primary-200">全部免费 · 无需注册 · 数据保留在本地浏览器</p>
       </div>
@@ -108,6 +108,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h2 class="text-xl font-bold text-center mb-2">🎯 趣味实用测评</h2>
       <p class="text-gray-500 text-center mb-10 text-sm">有趣又富有洞察力，发现你生活中的另一面</p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Temperament -->
+        <a href={`${import.meta.env.BASE_URL}temperament`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-2xl">🍵</div>
+            <span class="text-xs bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full font-medium">热点</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">淡人/浓人气质鉴定</h3>
+          <p class="text-xs text-gray-400 mb-2">情绪唤醒与反应性模型</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">20题 · 2-3分钟 · 你是心如止水的"古希腊掌管淡定的神"，还是热烈抓马的"浓缩火药桶"？</p>
+          <div class="flex items-center gap-2 text-teal-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Boundary -->
+        <a href={`${import.meta.env.BASE_URL}boundary`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center text-2xl">🦔</div>
+            <span class="text-xs bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full font-medium">人际</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">讨好型/不好惹指数</h3>
+          <p class="text-xs text-gray-400 mb-2">社交边界与坚定性评估</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">25题 · 3分钟 · 你是习惯性委屈自己的"便利贴"，还是自带结界的"带刺玫瑰"？</p>
+          <div class="flex items-center gap-2 text-rose-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Meritocracy -->
+        <a href={`${import.meta.env.BASE_URL}meritocracy`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-2xl">🏆</div>
+            <span class="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-medium">价值观</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">优绩主义程度测评</h3>
+          <p class="text-xs text-gray-400 mb-2">6维度成功观分析</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">24题 · 3-4分钟 · 你对"努力=成功"有多相信？内卷还是躺平？</p>
+          <div class="flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Overthinking -->
+        <a href={`${import.meta.env.BASE_URL}overthinking`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-violet-100 text-violet-600 rounded-xl flex items-center justify-center text-2xl">🌀</div>
+            <span class="text-xs bg-violet-50 text-violet-700 px-2 py-0.5 rounded-full font-medium">认知</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">精神内耗指数测评</h3>
+          <p class="text-xs text-gray-400 mb-2">5维度认知消耗分析</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">20题 · 2-3分钟 · 你是"内耗永动机"还是"人间清醒"？测测你的心理带宽消耗。</p>
+          <div class="flex items-center gap-2 text-violet-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
+        <!-- Procrastination -->
+        <a href={`${import.meta.env.BASE_URL}procrastination`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-xl flex items-center justify-center text-2xl">⏳</div>
+            <span class="text-xs bg-cyan-50 text-cyan-700 px-2 py-0.5 rounded-full font-medium">行为</span>
+          </div>
+          <h3 class="font-bold text-lg mb-1">拖延症类型鉴定</h3>
+          <p class="text-xs text-gray-400 mb-2">5维度执行功能分析</p>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3">20题 · 2-3分钟 · 你是"死线战神"还是"完美主义瘫痪"？找到你拖延的根源。</p>
+          <div class="flex items-center gap-2 text-cyan-600 font-medium text-sm group-hover:gap-3 transition-all">开始测评 <span>→</span></div>
+        </a>
+
         <!-- Spirit Animal -->
         <a href={`${import.meta.env.BASE_URL}animal`} class="card group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block">
           <div class="flex items-start justify-between mb-3">

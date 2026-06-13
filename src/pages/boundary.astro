@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BoundaryQuizEngine from '../components/BoundaryQuizEngine';
+---
+
+<BaseLayout
+  title="讨好型/不好惹指数测评"
+  description="25道题测测你的社交边界——你是习惯性委屈自己的便利贴，还是自带结界的带刺玫瑰？"
+>
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+      <BoundaryQuizEngine client:load />
+    </div>
+  </main>
+</BaseLayout>

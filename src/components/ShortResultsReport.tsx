@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react';
 import type { PersonalityResult } from '../lib/types';
 import { generateReport } from '../lib/reportText';
 import { generateShortMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function ShortResultsReport() {
   const [result, setResult] = useState<PersonalityResult | null>(null);
@@ -28,6 +29,7 @@ export default function ShortResultsReport() {
     );
   }
 
+  const { chartRef, downloadPoster } = usePosterDownload('大五人格雷达图_简洁版.png');
   const report = generateReport(result);
 
   return (
@@ -55,7 +57,7 @@ export default function ShortResultsReport() {
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-4">人格轮廓雷达图</h2>
         <div style={{ height: 400 }}>
-          <ReactECharts option={buildRadarOption(result)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildRadarOption(result)} style={{ height: '100%' }} />
         </div>
       </div>
 
@@ -160,6 +162,23 @@ export default function ShortResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '大五人格雷达图',
+              subtitle: 'Big Five · 简洁版',
+              emoji: '⚡',
+              highlights: result.domains.map(d => ({
+                label: d.name,
+                value: `${d.percentile}%`,
+                color: d.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
         <br />

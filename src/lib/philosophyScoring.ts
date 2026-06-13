@@ -1,4 +1,4 @@
-import { philosophySchools } from '../data/philosophyData';
+import { philosophySchools, type PhilosophySchool } from '../data/philosophyData';
 
 export interface PhilosophyResult {
   schools: PhilosophySchoolScore[];
@@ -6,18 +6,7 @@ export interface PhilosophyResult {
   timestamp: number;
 }
 
-export interface PhilosophySchoolScore {
-  id: string;
-  name: string;
-  label: string;
-  emoji: string;
-  color: string;
-  description: string;
-  longDescription: string;
-  coreIdeas: string[];
-  keyQuote: string;
-  keyQuoteAuthor: string;
-  lifeImplication: string;
+export interface PhilosophySchoolScore extends PhilosophySchool {
   /** Raw accumulated score */
   rawScore: number;
   /** Normalized percentage (0-100), higher = stronger alignment */

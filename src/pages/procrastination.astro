@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProcrastinationQuizEngine from '../components/ProcrastinationQuizEngine';
+---
+
+<BaseLayout
+  title="拖延症类型鉴定"
+  description="20道题找到你拖延的根源——你是死线战神、完美主义瘫痪、任务恐惧逃兵还是随性自由人？"
+>
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+      <ProcrastinationQuizEngine client:load />
+    </div>
+  </main>
+</BaseLayout>

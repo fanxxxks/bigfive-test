@@ -34,7 +34,7 @@ export default function LikertScale({ labels, value, onChange }: LikertScaleProp
       {/* Mobile-friendly labels */}
       <div className="flex justify-between text-[10px] text-gray-400 sm:hidden">
         <span>{labels[0]}</span>
-        <span>{labels[6]}</span>
+        <span>{labels[labels.length - 1]}</span>
       </div>
     </div>
   );

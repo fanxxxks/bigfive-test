@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react';
 import type { EQResult, EQLevelMeta } from '../data/eqData';
 import { eqLevels } from '../data/eqData';
 import { generateEQMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function EQResultsReport() {
   const [r, setR] = useState<EQResult | null>(null);
@@ -13,6 +14,7 @@ export default function EQResultsReport() {
   if (!r) return (<div className="text-center py-20"><p className="text-gray-400 text-lg">未找到测评结果。</p><a href={`${import.meta.env.BASE_URL}eq`} className="btn-primary inline-block mt-4">去测评</a></div>);
 
   const levelMeta: EQLevelMeta | undefined = eqLevels.find(l => l.level === r.level);
+  const { chartRef, downloadPoster } = usePosterDownload('情商EQ雷达图.png');
 
   return (<div className="space-y-8">
     {/* Header */}
@@ -54,7 +56,7 @@ export default function EQResultsReport() {
     {/* Radar Chart */}
     <div className="card">
       <h2 className="text-lg font-bold text-gray-800 mb-4">5维度能力雷达图</h2>
-      <div style={{ height: 380 }}><ReactECharts option={radarOpt(r)} style={{ height: '100%' }} /></div>
+      <div style={{ height: 380 }}><ReactECharts ref={chartRef} option={radarOpt(r)} style={{ height: '100%' }} /></div>
     </div>
 
     {/* Dimensions Detail */}
@@ -105,6 +107,23 @@ export default function EQResultsReport() {
         >
           📥 下载MD报告
         </button>
+        <button
+          onClick={() => downloadPoster({
+            title: '情商EQ雷达图',
+            subtitle: `综合得分 ${r.totalScore} · ${r.level}`,
+            emoji: r.levelEmoji,
+            highlights: r.dimensions.map(d => ({
+              label: d.name,
+              value: `${d.percentage}%`,
+              color: d.color,
+            })),
+            footer: '自我探索平台 · bigfive-test',
+            timestamp: new Date(r.timestamp).toLocaleString('zh-CN'),
+          })}
+          className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+        >
+          🎨 生成分享海报
+        </button>
       </div>
     </div>
   </div>);
@@ -122,12 +141,30 @@ function suggestions(r: EQResult): string[] {
   const tips: string[] = [];
   const lowest = [...r.dimensions].sort((a, b) => a.percentage - b.percentage);
   const weak = lowest.slice(0, 2);
+
+  // Dynamic suggestion map based on actual dimension IDs from the result
+  const suggestionMap: Record<string, string> = {};
+  for (const d of r.dimensions) {
+    // Generate suggestions based on dimension characteristics rather than hardcoded IDs
+    const name = d.name;
+    if (d.id.includes('aware') || name.includes('觉察') || name.includes('自知')) {
+      suggestionMap[d.id] = '每天花5分钟记录你的情绪和触发因素，坚持两周就能显著提升自我觉察能力。';
+    } else if (d.id.includes('regulat') || name.includes('调节') || name.includes('管理')) {
+      suggestionMap[d.id] = '尝试"暂停6秒"法则——在情绪激动时先深呼吸6秒再回应，这个简单的习惯能改变很多。';
+    } else if (d.id.includes('empath') || name.includes('同理') || name.includes('共情')) {
+      suggestionMap[d.id] = '在对话中练习"先复述再回应"：用自己的话复述对方的感受，确认理解后再给出你的看法。';
+    } else if (d.id.includes('social') || name.includes('社交') || name.includes('人际')) {
+      suggestionMap[d.id] = '从小范围开始练习社交：每周主动和一个不太熟的人聊5分钟，慢慢扩大你的社交舒适区。';
+    } else if (d.id.includes('motiv') || name.includes('动机') || name.includes('驱动')) {
+      suggestionMap[d.id] = '为自己设立具体的、可衡量的小目标（而非模糊的"努力"），每完成一个就给自己一个小奖励。';
+    }
+  }
+
   for (const d of weak) {
-    if (d.id === 'awareness') tips.push('每天花5分钟记录你的情绪和触发因素，坚持两周就能显著提升自我觉察能力。');
-    if (d.id === 'regulation') tips.push('尝试"暂停6秒"法则——在情绪激动时先深呼吸6秒再回应，这个简单的习惯能改变很多。');
-    if (d.id === 'empathy') tips.push('在对话中练习"先复述再回应"：用自己的话复述对方的感受，确认理解后再给出你的看法。');
-    if (d.id === 'social') tips.push('从小范围开始练习社交：每周主动和一个不太熟的人聊5分钟，慢慢扩大你的社交舒适区。');
-    if (d.id === 'motivation') tips.push('为自己设立具体的、可衡量的小目标（而非模糊的"努力"），每完成一个就给自己一个小奖励。');
+    const tip = suggestionMap[d.id];
+    if (tip) {
+      tips.push(tip);
+    }
   }
   if (tips.length === 0) tips.push('你的情商各方面都比较均衡，继续保持并寻求在优势维度上的精进。');
   tips.push('📚 推荐阅读：Daniel Goleman《情商》——了解情商的科学基础和系统提升方法。');

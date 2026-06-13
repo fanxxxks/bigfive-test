@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { PhilosophyResult, PhilosophySchoolScore } from '../lib/philosophyScoring';
 import { generatePhilosophyMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function PhilosophyResultsReport() {
   const [result, setResult] = useState<PhilosophyResult | null>(null);
@@ -29,6 +30,7 @@ export default function PhilosophyResultsReport() {
 
   const top5 = result.schools.slice(0, 5);
   const top3 = result.schools.slice(0, 3);
+  const { chartRef, downloadPoster } = usePosterDownload('哲学气质雷达图.png');
 
   return (
     <div className="space-y-8">
@@ -75,7 +77,7 @@ export default function PhilosophyResultsReport() {
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-4">18流派匹配全景图</h2>
         <div style={{ height: 520 }}>
-          <ReactECharts option={buildBarOption(result)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildBarOption(result)} style={{ height: '100%' }} />
         </div>
       </div>
 
@@ -150,6 +152,23 @@ export default function PhilosophyResultsReport() {
           >
             📥 下载MD报告
           </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '哲学气质图谱',
+              subtitle: `最匹配：${top3[0].name} ${top3[0].percentage}%`,
+              emoji: top3[0].emoji,
+              highlights: top3.map(s => ({
+                label: s.name,
+                value: `${s.percentage}%`,
+                color: s.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
+          </button>
         </div>
       </div>
     </div>
@@ -169,6 +188,8 @@ function generateSynthesis(top3: PhilosophySchoolScore[]): string {
       sartre: '尼采的自我超越与萨特的自由选择在您身上融合——您深信人必须自己定义自己的价值，不受传统和他人期待的束缚。您是一个彻底的自我主宰者。这两种思想共同构成了"自我创造"的哲学：你的人生是你自己的作品。',
       buddhism: '尼采的权力意志与佛学的放下执着形成对比——您内心可能有一种张力：既想超越和征服，又明白执着的痛苦。这种矛盾使您富有深度。您可能在行动时充满力量，在反思时又渴望宁静——两种看似矛盾的方向，在您身上可以互补而非冲突。',
       confucius: '尼采的反传统与儒家的伦理秩序形成碰撞——您在独立思考和尊重传统之间寻找自己的平衡点。您可能在某些领域大胆突破，在另一些领域珍视传承——这种选择性本身就是一种成熟的智慧。',
+      laozi: '尼采的超人哲学与老子的无为之道形成奇妙的对比——一个主张强力超越，一个主张顺应自然。在您身上，这两种思想不是矛盾，而是互补：您知道什么时候该奋力拼搏，什么时候该顺势而为。这种智慧使您既不会过度强求，也不会消极逃避。',
+      marx: '尼采的个体超越与马克思的集体解放形成张力——您既珍视个人的独立和创造力，又关注社会的公平和正义。这种组合使您既不是原子化的个人主义者，也不是消融个性的集体主义者。',
     },
     camus: {
       nietzsche: '加缪的荒诞反抗与尼采的强力意志在您身上共鸣——您直面世界的无意义，却选择在荒诞中创造自己的幸福。这两种思想共同构成了一种"无宗教的信仰"：不依靠天堂的承诺，只在人间创造意义。',
@@ -201,16 +222,35 @@ function generateSynthesis(top3: PhilosophySchoolScore[]): string {
     marx: {
       sartre: '马克思的实践哲学与萨特的行动哲学结合——您不满足于解释世界，您要改变它，无论是社会还是自身。您是行动派的思想家——思考的目的是为了改变，而非止于理解。',
       utilitarianism: '马克思的集体关怀与功利主义的幸福计算有共同之处——您关心最大多数人的福祉，注重实际结果。您的理想主义是务实的：关注的是"什么真正有效"而非"什么听起来最好"。',
+      confucius: '马克思的社会关怀与儒家的仁爱思想有深层共鸣——您关心的是如何在现实中实现人与人之间的公正与和谐。您既重视制度建设，也重视人的品德修养——二者缺一不可。',
     },
     kant: {
       stoicism: '康德的道德理性与斯多葛的内在修炼结合——您相信通过理性可以找到正确的行动准则，并以此指导人生。这种组合使您成为一个具有原则性但不失弹性的道德行动者。',
       aristotle: '康德的义务论与亚里士多德的德性伦理互补——您既重视原则，也重视在具体情境中的判断。您不是一个"照搬规则"的人，而是在原则的指导下灵活地应对生活。',
+      buddhism: '康德的道德律令与佛学的慈悲智慧在您身上融汇——您相信道德有客观的基础，而这种基础与对众生苦难的深切体认是一致的。理性与慈悲在您这里不是对立面，而是同一条道路的两个方向。',
     },
     zhuangzi: {
       nietzsche: '庄子的逍遥与尼采的自我超越在您身上形成奇妙的交响——东方和西方最具颠覆性的思想在您身上相遇。您既不被传统束缚，也不被现代性裹挟——您是真正的自由思想者。',
     },
     epicurus: {
       stoicism: '伊壁鸠鲁的宁静快乐与斯多葛的内心理性结合——您知道幸福不在于外界拥有多少，而在于内心如何感受。您是一个在简朴中找到丰富、在安静中找到力量的人。',
+    },
+    descartes: {
+      hume: '笛卡尔的理性主义与休谟的经验主义在您身上形成哲学史上最经典的张力——您既相信清晰的理性推理，又对经验的局限性保持清醒。这种组合使您成为一个既严谨又务实的思想者：您用理性搭建框架，用经验检验结论。',
+      kant: '笛卡尔与康德——理性主义的传承。您相信理性具有认识世界和指导行动的力量，不轻易被感性和权威左右。您的思维方式系统而深刻，善于从第一原理出发分析问题。',
+      plato: '笛卡尔与柏拉图共享对理性和确定性的追求。您相信表面现象之下存在着更本质的真理，而这种真理可以通过理性思维来把握。您是一个不满足于"常识"的深度思考者。',
+    },
+    hume: {
+      descartes: '休谟的经验怀疑与笛卡尔的理性主义在您身上碰撞——这是哲学史上最伟大的张力之一。您既重视实际经验，又不放弃清晰思考。这种组合让您成为一个"温和的理性主义者"：用经验来约束理性，用理性来组织经验。',
+      kant: '休谟的怀疑论据说是"把康德从独断论的迷梦中唤醒"的力量。您的哲学气质体现了这种觉醒：您既意识到理性的局限性，又不愿放弃对普遍真理的追求。您是那个在坚信和怀疑之间找到平衡的人。',
+    },
+    aristotle: {
+      kant: '亚里士多德的德性伦理与康德的义务论在您身上互补——您既重视品格的培养，也重视原则的坚守。您知道，"做一个好人"和"做正确的事"虽然在大多数情况下一致，但张力出现时，您能够在两者之间找到平衡。',
+      confucius: '亚里士多德与孔子——东西方德性伦理的伟大交汇。您相信良好生活不是遵循抽象规则，而是在具体情境中做出恰当的判断和行动。您的道德感扎根于现实生活，而非天空中的理念。',
+    },
+    wangyangming: {
+      kant: '王阳明的心学与康德的道德哲学在您身上交汇——您相信内心的良知是道德判断的最终来源，而这种良知与理性是相通的。知行合一的理念使您不仅思考"什么是对的"，更努力去做到它。',
+      nietzsche: '王阳明与尼采——看似迥异的思想在您身上形成创造性的张力。心学强调良知本有，尼采强调价值自创。您既相信内心有真实的道德声音，又不愿意被任何外在的道德体系所束缚。这种组合使您成为既真诚又自由的人。',
     },
   };
 

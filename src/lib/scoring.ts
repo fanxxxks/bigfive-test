@@ -33,7 +33,11 @@ export function paginateQuestions(
  * Calculate the score for a single question.
  * Reverse-scored items get 8 - score.
  */
-function itemScore(q: Question, answer: number): number {
+export function itemScore(reverse: boolean, answer: number): number {
+  return reverse ? 8 - answer : answer;
+}
+
+function itemScoreForQuestion(q: Question, answer: number): number {
   return q.reverse ? 8 - answer : answer;
 }
 
@@ -64,7 +68,7 @@ function consistencyCheck(answers: Map<string, number>): {
     const scoreA = answers.get(qA.id);
     const scoreB = answers.get(qB.id);
     if (scoreA == null || scoreB == null) continue;
-    const diff = Math.abs(itemScore(qA, scoreA) - itemScore(qB, scoreB));
+    const diff = Math.abs(itemScoreForQuestion(qA, scoreA) - itemScoreForQuestion(qB, scoreB));
     if (diff >= 3) {
       inconsistentPairs++;
     }
@@ -117,7 +121,7 @@ export function computeResults(answersMap: Map<string, number>): PersonalityResu
     for (const q of fqs) {
       const answer = answersMap.get(q.id);
       if (answer != null) {
-        rawScore += itemScore(q, answer);
+        rawScore += itemScore(q.reverse, answer);
       }
     }
     const maxScore = fqs.length * 7; // each item max 7
@@ -141,7 +145,7 @@ export function computeResults(answersMap: Map<string, number>): PersonalityResu
     for (const q of dqs) {
       const answer = answersMap.get(q.id);
       if (answer != null) {
-        rawScore += itemScore(q, answer);
+        rawScore += itemScore(q.reverse, answer);
       }
     }
     const maxScore = dqs.length * 7;

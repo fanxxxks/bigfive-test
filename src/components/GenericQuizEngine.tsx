@@ -1,15 +1,15 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import type { QuizConfig, BaseResult } from '../lib/quiz-types';
+import type { QuizConfig } from '../lib/quiz-types';
 import LikertScale from './LikertScale';
 import ProgressBar from './ProgressBar';
 
-export interface GenericQuizEngineProps<T extends BaseResult> {
+export interface GenericQuizEngineProps<T extends { timestamp: number }> {
   config: QuizConfig;
   /** Scoring function: takes a Map of questionId→score, returns the result */
   computeResult: (answers: Map<string, number>) => T;
 }
 
-export default function GenericQuizEngine<T extends BaseResult>({
+export default function GenericQuizEngine<T extends { timestamp: number }>({
   config,
   computeResult,
 }: GenericQuizEngineProps<T>) {

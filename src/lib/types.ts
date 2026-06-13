@@ -1,15 +1,10 @@
 export interface Question {
   id: string;
   text: string;
-  domain: DomainKey;
+  domain: string;
   facet: string;
   reverse: boolean;
   pairId?: string; // for consistency check pairs
-}
-
-export interface Answer {
-  questionId: string;
-  score: number; // 1-7
 }
 
 export interface FacetScore {
@@ -61,19 +56,4 @@ export interface FacetMeta {
   description: string;
 }
 
-export interface NormRow {
-  percentile: number;
-  O: number;
-  C: number;
-  E: number;
-  A: number;
-  N: number;
-  [facet: string]: number;
-}
 
-export interface PageState {
-  currentPage: number;
-  totalPages: number;
-  answers: Map<string, number>;
-  isSubmitted: boolean;
-}

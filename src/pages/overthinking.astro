@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OverthinkingQuizEngine from '../components/OverthinkingQuizEngine';
+---
+
+<BaseLayout
+  title="精神内耗指数测评"
+  description="20道题测测你的精神内耗程度——你是内耗永动机、选择性内耗、人间清醒还是间歇性内耗？"
+>
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+      <OverthinkingQuizEngine client:load />
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TemperamentQuizEngine from '../components/TemperamentQuizEngine';
+---
+
+<BaseLayout
+  title="淡人/浓人气质鉴定"
+  description="20道题测测你的淡/浓浓度比例——你是心如止水的水豚，还是热烈抓马的尖叫土拨鼠？"
+>
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+      <TemperamentQuizEngine client:load />
+    </div>
+  </main>
+</BaseLayout>

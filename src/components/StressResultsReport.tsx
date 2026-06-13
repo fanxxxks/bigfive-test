@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { StressResult } from '../lib/stressScoring';
 import { generateStressMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function StressResultsReport() {
   const [result, setResult] = useState<StressResult | null>(null);
@@ -12,6 +13,7 @@ export default function StressResultsReport() {
   if (!result) return (<div className="text-center py-20"><p className="text-gray-400 text-lg">未找到测评结果。</p><a href={`${import.meta.env.BASE_URL}stress`} className="btn-primary inline-block mt-4">去测评</a></div>);
 
   const { primary, styles } = result;
+  const { chartRef, downloadPoster } = usePosterDownload('压力应对雷达图.png');
   return (
     <div className="space-y-8">
       <div className="card text-center">
@@ -28,7 +30,7 @@ export default function StressResultsReport() {
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-4">4种应对方式完整排序</h2>
         <div style={{ height: 300 }}>
-          <ReactECharts option={buildBarOption(result)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildBarOption(result)} style={{ height: '100%' }} />
         </div>
       </div>
       <div className="space-y-4">
@@ -52,6 +54,23 @@ export default function StressResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '压力应对风格图谱',
+              subtitle: `${primary.emoji} ${primary.name} ${primary.percentage}%`,
+              emoji: primary.emoji,
+              highlights: styles.map(s => ({
+                label: s.name,
+                value: `${s.percentage}%`,
+                color: s.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
       </div>

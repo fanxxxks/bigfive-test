@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react';
 import type { AttachmentResult } from '../lib/attachmentScoring';
 import { attachmentStyles } from '../data/attachmentData';
 import { generateAttachmentMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function AttachmentResultsReport() {
   const [result, setResult] = useState<AttachmentResult | null>(null);
@@ -30,6 +31,7 @@ export default function AttachmentResultsReport() {
 
   const { style, anxiety, avoidance, stylePercentages } = result;
   const allStyles = Object.values(attachmentStyles);
+  const { chartRef, downloadPoster } = usePosterDownload('依恋风格雷达图.png');
 
   return (
     <div className="space-y-8">
@@ -93,7 +95,7 @@ export default function AttachmentResultsReport() {
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-4">四种依恋风格匹配度</h2>
         <div style={{ height: 320 }}>
-          <ReactECharts option={buildStyleChart(stylePercentages)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildStyleChart(stylePercentages)} style={{ height: '100%' }} />
         </div>
       </div>
 
@@ -181,6 +183,24 @@ export default function AttachmentResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '依恋风格图谱',
+              subtitle: `${style.emoji} ${style.name} · 焦虑${anxiety}% 回避${avoidance}%`,
+              emoji: style.emoji,
+              highlights: [
+                { label: '安全型', value: `${stylePercentages.secure}%`, color: '#4caf50' },
+                { label: '焦虑型', value: `${stylePercentages.anxious}%`, color: '#ff9800' },
+                { label: '回避型', value: `${stylePercentages.avoidant}%`, color: '#2196f3' },
+                { label: '恐惧型', value: `${stylePercentages.fearful}%`, color: '#9c27b0' },
+              ],
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
       </div>

@@ -445,3 +445,133 @@ export function generateMoneyMD(result: MoneyResult): string {
   }
   return lines.join('\n');
 }
+
+// ─── 淡人/浓人气质 ─────────────────────────────────────────
+export function generateTemperamentMD(r: import('../data/temperamentData').TemperamentResult): string {
+  const p = r.primary;
+  const lines: string[] = [];
+  lines.push('# 淡人/浓人气质鉴定报告');
+  lines.push('');
+  lines.push(`> 报告生成时间：${ts(r.timestamp)}`);
+  lines.push('');
+  lines.push(`## 你的主导气质：${p.emoji} ${p.name}`);
+  lines.push('');
+  lines.push(`> "${p.tagline}"`);
+  lines.push('');
+  lines.push(`### 气质数据`);
+  lines.push(`- 情绪唤醒度：${r.arousalPct}%`);
+  lines.push(`- 情绪反应性：${r.reactivityPct}%`);
+  lines.push('');
+  lines.push(`### 各类型匹配度`);
+  for (const s of r.styles) lines.push(`- ${s.emoji} ${s.name}: ${s.percentage}%`);
+  lines.push('');
+  lines.push('## 深度解读');
+  lines.push('');
+  lines.push(p.longDescription);
+  lines.push('');
+  lines.push('### 💪 核心优势');
+  for (const s of p.strengths) lines.push(`- ${s}`);
+  lines.push('');
+  lines.push('### ⚠️ 成长课题');
+  for (const c of p.challenges) lines.push(`- ${c}`);
+  lines.push('');
+  lines.push('### 💼 适合的职业方向');
+  lines.push(p.suitableCareers);
+  lines.push('');
+  lines.push('### 💕 亲密关系风格');
+  lines.push(p.relationshipStyle);
+  lines.push('');
+  lines.push('### 🌱 生活建议');
+  lines.push(p.lifeAdvice);
+  return lines.join('\n');
+}
+
+// ─── 讨好型/不好惹指数 ──────────────────────────────────────
+export function generateBoundaryMD(r: import('../data/boundaryData').BoundaryResult): string {
+  const p = r.primary;
+  const lines: string[] = [];
+  lines.push('# 讨好型/不好惹指数测评报告');
+  lines.push('');
+  lines.push(`> ${ts(r.timestamp)}`);
+  lines.push('');
+  lines.push(`## 你的社交边界类型：${p.emoji} ${p.name}`);
+  lines.push('');
+  lines.push(`### 核心数据`);
+  lines.push(`- 坚定性指数：${r.assertPct}%`);
+  lines.push(`- 讨好倾向指数：${r.pleasePct}%`);
+  for (const s of r.styles) lines.push(`- ${s.emoji} ${s.name}: ${s.percentage}%`);
+  lines.push('');
+  lines.push(p.longDescription);
+  lines.push('');
+  lines.push('### 🛡️ 边界建立建议');
+  lines.push(p.boundaryAdvice);
+  lines.push('');
+  lines.push('### ⚔️ 冲突应对风格');
+  lines.push(p.conflictStyle);
+  lines.push('');
+  lines.push('### 💼 职场建议');
+  lines.push(p.workplaceAdvice);
+  return lines.join('\n');
+}
+
+// ─── 优绩主义程度 ──────────────────────────────────────────
+export function generateMeritocracyMD(r: import('../data/meritocracyData').MeritocracyResult): string {
+  const p = r.primary;
+  const lines: string[] = [];
+  lines.push('# 优绩主义程度测评报告');
+  lines.push(`> ${ts(r.timestamp)}`);
+  lines.push('');
+  lines.push(`## ${p.emoji} ${p.name} · 综合指数${r.totalPct}%`);
+  lines.push('');
+  lines.push('## 6维度分析');
+  for (const d of r.dimensions) lines.push(`- ${d.emoji} ${d.name}: ${d.percentage}%`);
+  lines.push('');
+  lines.push(p.longDescription);
+  lines.push('');
+  lines.push('### 🏛️ 文化分析');
+  lines.push(p.culturalAnalysis);
+  lines.push('');
+  lines.push('### 🌱 平衡建议');
+  lines.push(p.balanceAdvice);
+  return lines.join('\n');
+}
+
+// ─── 精神内耗指数 ──────────────────────────────────────────
+export function generateOverthinkingMD(r: import('../data/overthinkingData').OverthinkingResult): string {
+  const p = r.primary;
+  const lines: string[] = [];
+  lines.push('# 精神内耗指数测评报告');
+  lines.push(`> ${ts(r.timestamp)}`);
+  lines.push('');
+  lines.push(`## ${r.levelEmoji} ${r.level} · 综合指数${r.totalPct}%`);
+  lines.push('');
+  lines.push('## 5维度分析');
+  for (const d of r.dimensions) lines.push(`- ${d.emoji} ${d.name}: ${d.percentage}% — ${d.interpretation}`);
+  lines.push('');
+  lines.push(`## 你的内耗类型：${p.emoji} ${p.name}`);
+  lines.push('');
+  lines.push(p.longDescription);
+  lines.push('');
+  lines.push('## 反内耗策略');
+  for (const s of p.strategies) lines.push(`- ${s}`);
+  return lines.join('\n');
+}
+
+// ─── 拖延症类型 ────────────────────────────────────────────
+export function generateProcrastinationMD(r: import('../data/procrastinationData').ProcrastinationResult): string {
+  const p = r.primary;
+  const lines: string[] = [];
+  lines.push('# 拖延症类型鉴定报告');
+  lines.push(`> ${ts(r.timestamp)}`);
+  lines.push('');
+  lines.push(`## ${p.emoji} ${p.name}`);
+  lines.push('');
+  lines.push(p.longDescription);
+  lines.push('');
+  lines.push('## 5维度分析');
+  for (const d of r.dimensions) lines.push(`- ${d.emoji} ${d.name}: ${d.percentage}% — ${d.interpretation}`);
+  lines.push('');
+  lines.push('## 反拖延策略');
+  for (const s of p.strategies) lines.push(`- ${s}`);
+  return lines.join('\n');
+}

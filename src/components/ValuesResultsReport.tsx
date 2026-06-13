@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { ValuesResult } from '../lib/valuesScoring';
 import { generateValuesMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function ValuesResultsReport() {
   const [result, setResult] = useState<ValuesResult | null>(null);
@@ -29,6 +30,7 @@ export default function ValuesResultsReport() {
 
   const top3 = result.values.slice(0, 3);
   const bottom3 = result.values.slice(-3);
+  const { chartRef, downloadPoster } = usePosterDownload('核心价值观雷达图.png');
 
   return (
     <div className="space-y-8">
@@ -63,7 +65,7 @@ export default function ValuesResultsReport() {
         <h2 className="text-lg font-bold text-gray-800 mb-4">10种价值观完整排序</h2>
         <p className="text-sm text-gray-500 mb-4">基于 Schwartz 的10种基本价值观理论</p>
         <div style={{ height: 400 }}>
-          <ReactECharts option={buildBarOption(result)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildBarOption(result)} style={{ height: '100%' }} />
         </div>
       </div>
 
@@ -150,6 +152,23 @@ export default function ValuesResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '核心价值观图谱',
+              subtitle: `最核心：${top3[0].name} ${top3[0].percentage}%`,
+              emoji: top3[0].emoji,
+              highlights: top3.map(v => ({
+                label: v.name,
+                value: `${v.percentage}%`,
+                color: v.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
       </div>

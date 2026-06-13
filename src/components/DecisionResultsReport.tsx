@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import type { DecisionResult } from '../lib/decisionScoring';
 import { generateDecisionMD, downloadMarkdown } from '../lib/markdownExport';
+import { usePosterDownload } from './PosterDownload';
 
 export default function DecisionResultsReport() {
   const [result, setResult] = useState<DecisionResult | null>(null);
@@ -28,6 +29,7 @@ export default function DecisionResultsReport() {
   }
 
   const { primary, styles } = result;
+  const { chartRef, downloadPoster } = usePosterDownload('决策风格雷达图.png');
 
   return (
     <div className="space-y-8">
@@ -76,7 +78,7 @@ export default function DecisionResultsReport() {
       <div className="card">
         <h2 className="text-lg font-bold text-gray-800 mb-4">4种决策风格完整排序</h2>
         <div style={{ height: 300 }}>
-          <ReactECharts option={buildBarOption(result)} style={{ height: '100%' }} />
+          <ReactECharts ref={chartRef} option={buildBarOption(result)} style={{ height: '100%' }} />
         </div>
       </div>
 
@@ -113,6 +115,23 @@ export default function DecisionResultsReport() {
             className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             📥 下载MD报告
+          </button>
+          <button
+            onClick={() => downloadPoster({
+              title: '决策风格图谱',
+              subtitle: `${primary.emoji} ${primary.name} ${primary.percentage}%`,
+              emoji: primary.emoji,
+              highlights: styles.map(s => ({
+                label: s.name,
+                value: `${s.percentage}%`,
+                color: s.color,
+              })),
+              footer: '自我探索平台 · bigfive-test',
+              timestamp: new Date(result.timestamp).toLocaleString('zh-CN'),
+            })}
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            🎨 生成分享海报
           </button>
         </div>
       </div>
