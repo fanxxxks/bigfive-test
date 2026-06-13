@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="测评方法论"
+  description="了解大五人格测评的科学基础——IPIP-NEO-120 量表介绍、信效度数据、常模构建方法与隐私承诺。"
+>
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <a href="/" class="text-sm text-primary-600 hover:text-primary-700 mb-6 inline-block">← 返回首页</a>
+      <article class="prose prose-gray max-w-none">
+        <h1>测评方法论</h1>
+
+        <h2>1. 关于大五人格模型</h2>
+        <p>
+          大五人格模型（Big Five / OCEAN）是目前心理学界最广泛接受和验证的人格结构理论。
+          它通过五个核心维度描述个体的人格差异：<strong>开放性（Openness）</strong>、<strong>尽责性（Conscientiousness）</strong>、
+          <strong>外向性（Extraversion）</strong>、<strong>宜人性（Agreeableness）</strong> 和 <strong>神经质（Neuroticism）</strong>。
+        </p>
+        <p>
+          这五个维度并非人为划分的"人格类型"，而是通过词汇学研究——对数十万人的自我描述和同伴评价进行因素分析——自然浮现的结构。
+          每个个体在五个维度上都处于一个连续谱系的某一点，而非落入某个固定类别。
+        </p>
+
+        <h2>2. 量表来源：IPIP-NEO-120</h2>
+        <p>
+          本网站采用 <strong>IPIP-NEO-120</strong>（International Personality Item Pool – NEO 120-item version）量表。
+          IPIP 是由美国俄勒冈研究所（Oregon Research Institute）开发的开源人格题库项目，旨在为科学研究和公众应用提供免费、高质量的人格测量工具。
+        </p>
+        <ul>
+          <li><strong>题量：</strong>120 道核心题目 + 20 道一致性检验题目（共 140 题）</li>
+          <li><strong>覆盖：</strong>5 大维度 × 6 子维度 = 30 个子维度，每个子维度 4 题</li>
+          <li><strong>选项：</strong>7 点李克特量表（从"非常不同意"到"非常同意"）</li>
+          <li><strong>记分：</strong>正向计分 + 反向计分混合设计，消除默许偏差</li>
+        </ul>
+
+        <h2>3. 信度与效度</h2>
+        <p>
+          IPIP-NEO-120 在多项大规模跨文化研究中表现出色：
+        </p>
+        <ul>
+          <li><strong>内部一致性信度（Cronbach's α）：</strong>五大维度 α 系数通常在 0.80–0.90 之间，子维度在 0.70–0.85 之间。</li>
+          <li><strong>重测信度：</strong>间隔 6-8 周重测相关系数 r = 0.80–0.90，表明人格测量具有良好的时间稳定性。</li>
+          <li><strong>结构效度：</strong>因子分析结果与 NEO-PI-R（商业金标准量表）高度一致，五因子结构跨文化稳定。</li>
+          <li><strong>聚合效度：</strong>与 NEO-PI-R 对应维度的相关系数 r > 0.85。</li>
+        </ul>
+
+        <h2>4. 正向与反向计分</h2>
+        <p>
+          为减少"默许偏差"（acquiescence bias — 部分答题者倾向于一律同意或不同意所有陈述），量表中约半数为反向表述题目。
+          例如，对于"焦虑性"维度，正向题为"我经常为小事感到焦虑"，反向题为"我是一个心态平和的人"。
+          在计分时，反向题目得分会进行逆向转换（得分 = 8 - 原始分），确保高得分始终代表更明显的该特质倾向。
+        </p>
+
+        <h2>5. 一致性检验</h2>
+        <p>
+          为确保答题数据的真实性，我们在量表中嵌入了 10 对"一致性检验题目"——这些题对在语义上高度相似，但分布在问卷的不同位置。
+          如果答题者是认真作答的，那么他在同一对题目上的得分应该非常接近；如果得分差异过大（≥ 3 分），则标记为"不一致"。
+          当不一致的对数超过 3 对时，系统会提示数据可信度较低，建议重新作答。
+        </p>
+
+        <h2>6. 常模与百分位</h2>
+        <p>
+          百分位（Percentile）反映了您在参考群体中的相对位置。例如，「开放性 85%」表示您的开放性得分高于约 85% 的参考群体成员。
+          本网站的常模数据基于 IPIP 公开发表的大样本研究数据（Johnson, 2014 等），通过正态分布模型将原始分映射为百分位。
+        </p>
+        <p>
+          <strong>注意：</strong>常模数据来源于国际样本，可能存在一定的文化差异。百分位仅供参考，不应作为绝对的"排名"来解读。
+        </p>
+
+        <h2>7. 隐私与数据安全</h2>
+        <p>
+          您的所有答题数据和测评结果<strong>完全存储在您的浏览器本地</strong>（使用 sessionStorage）。
+          我们<strong>不会</strong>收集、上传或存储您的任何答题数据。问卷提交后结果即时生成，无需注册账号。
+          关闭浏览器后，测评结果会自动清除。
+        </p>
+
+        <h2>8. 免责声明</h2>
+        <p>
+          本测评旨在帮助您更好地了解自己的人格特质，<strong>仅供个人参考和自我探索之用，不构成任何形式的心理诊断或临床评估</strong>。
+          如果您对自己的心理健康状况有任何顾虑，建议咨询具有执业资质的心理咨询师或精神科医生。
+        </p>
+      </article>
+
+      <div class="mt-10 text-center">
+        <a href="/quiz" class="btn-primary inline-block">开始免费测评</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

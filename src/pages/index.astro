@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="首页"
+  description="基于 IPIP-NEO-120 国际权威量表，科学测评你的大五人格特质，获取深度个性化分析报告。"
+>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white">
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+      </div>
+      <div class="relative max-w-5xl mx-auto px-6 py-24 md:py-36 text-center">
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+          探索你的<span class="text-yellow-300">人格密码</span>
+        </h1>
+        <p class="text-lg md:text-xl text-primary-100 max-w-2xl mx-auto mb-10 leading-relaxed">
+          基于国际公认的 <strong>IPIP-NEO-120</strong> 科学量表，从五大维度、三十个子维度深度剖析你的人格特质，
+          提供专业、详尽的个性化分析报告与成长建议。
+        </p>
+        <a
+          href="/quiz"
+          class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-xl font-bold text-lg
+                 hover:bg-yellow-300 hover:text-primary-900 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+          开始免费测评
+        </a>
+        <p class="mt-4 text-sm text-primary-200">约需 15-20 分钟 · 140 道科学题目 · 即时生成报告</p>
+      </div>
+    </section>
+
+    <!-- OCEAN Overview -->
+    <section class="max-w-6xl mx-auto px-6 py-20">
+      <h2 class="text-3xl font-bold text-center mb-4">大五人格模型（OCEAN）</h2>
+      <p class="text-gray-500 text-center mb-12 max-w-2xl mx-auto">
+        大五人格是目前心理学界最广泛接受的人格结构模型，将人格归纳为五个核心维度。
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        <div class="card text-center border-t-4 border-red-500 hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-3">🎨</div>
+          <h3 class="font-bold text-lg mb-1" style="color:#e74c3c">开放性 O</h3>
+          <p class="text-xs text-gray-400 mb-2">Openness</p>
+          <p class="text-sm text-gray-600 leading-relaxed">好奇心、想象力、审美敏感度与对新事物的接纳程度</p>
+        </div>
+        <div class="card text-center border-t-4 border-blue-500 hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-3">📋</div>
+          <h3 class="font-bold text-lg mb-1" style="color:#3498db">尽责性 C</h3>
+          <p class="text-xs text-gray-400 mb-2">Conscientiousness</p>
+          <p class="text-sm text-gray-600 leading-relaxed">自律、条理、成就动机与对责任的认真程度</p>
+        </div>
+        <div class="card text-center border-t-4 border-orange-400 hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-3">🎉</div>
+          <h3 class="font-bold text-lg mb-1" style="color:#f39c12">外向性 E</h3>
+          <p class="text-xs text-gray-400 mb-2">Extraversion</p>
+          <p class="text-sm text-gray-600 leading-relaxed">社交活跃度、积极情绪倾向与精力的充沛程度</p>
+        </div>
+        <div class="card text-center border-t-4 border-green-500 hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-3">🤝</div>
+          <h3 class="font-bold text-lg mb-1" style="color:#2ecc71">宜人性 A</h3>
+          <p class="text-xs text-gray-400 mb-2">Agreeableness</p>
+          <p class="text-sm text-gray-600 leading-relaxed">同理心、合作精神与对人际和谐的重视程度</p>
+        </div>
+        <div class="card text-center border-t-4 border-purple-500 hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-3">🧘</div>
+          <h3 class="font-bold text-lg mb-1" style="color:#9b59b6">神经质 N</h3>
+          <p class="text-xs text-gray-400 mb-2">Neuroticism</p>
+          <p class="text-sm text-gray-600 leading-relaxed">情绪稳定性与对负面情绪的易感程度</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="bg-white py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12">为什么选择我们？</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🔬</div>
+            <h3 class="font-bold text-lg mb-2">科学严谨</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">基于 IPIP-NEO-120 国际权威量表，经大量研究验证的信效度，确保结果可靠。</p>
+          </div>
+          <div class="text-center">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📊</div>
+            <h3 class="font-bold text-lg mb-2">多维分析</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">5 大维度 + 30 个子维度深度拆解，雷达图 + 百分位排名，全面透视你的人格结构。</p>
+          </div>
+          <div class="text-center">
+            <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🎯</div>
+            <h3 class="font-bold text-lg mb-2">个性建议</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">结合得分生成职场、人际、成长等多维度的个性化深度解读与实用建议。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Test Flow -->
+    <section class="max-w-4xl mx-auto px-6 py-20">
+      <h2 class="text-3xl font-bold text-center mb-12">测评流程</h2>
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
+        <div class="flex flex-col items-center text-center flex-1">
+          <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl font-bold mb-3">1</div>
+          <h3 class="font-bold mb-1">阅读题目</h3>
+          <p class="text-sm text-gray-500">根据真实感受作答</p>
+        </div>
+        <div class="text-gray-300 text-2xl md:rotate-0 rotate-90">→</div>
+        <div class="flex flex-col items-center text-center flex-1">
+          <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl font-bold mb-3">2</div>
+          <h3 class="font-bold mb-1">完成答题</h3>
+          <p class="text-sm text-gray-500">约 15-20 分钟 · 140 题</p>
+        </div>
+        <div class="text-gray-300 text-2xl md:rotate-0 rotate-90">→</div>
+        <div class="flex flex-col items-center text-center flex-1">
+          <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl font-bold mb-3">3</div>
+          <h3 class="font-bold mb-1">获取报告</h3>
+          <p class="text-sm text-gray-500">即时生成深度分析报告</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
+      <div class="max-w-2xl mx-auto text-center px-6">
+        <h2 class="text-3xl font-bold mb-4">准备好了吗？</h2>
+        <p class="text-primary-100 mb-8">开启一段深入了解自己的旅程，发现你的独特人格密码。</p>
+        <a
+          href="/quiz"
+          class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-xl font-bold text-lg
+                 hover:bg-yellow-300 hover:text-primary-900 transition-all shadow-lg"
+        >
+          开始免费测评
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-10 text-center text-sm">
+      <div class="max-w-4xl mx-auto px-6 space-y-2">
+        <p>基于 IPIP-NEO-120 国际人格题库 | 本测试仅供个人了解与参考，不构成临床诊断</p>
+        <p>
+          <a href="/methods" class="hover:text-white underline underline-offset-2">测评方法论</a>
+          <span class="mx-3">·</span>
+          <span>&copy; {new Date().getFullYear()} Big Five Personality Test</span>
+        </p>
+      </div>
+    </footer>
+  </main>
+</BaseLayout>
