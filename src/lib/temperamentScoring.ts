@@ -1,80 +1,84 @@
-import type { TemperamentResult, TemperamentScore } from '../data/temperamentData';
-import { temperamentList } from '../data/temperamentData';
+import type { TemperamentResult, TemperamentTypeScore } from '../data/temperamentData';
+export type { TemperamentResult } from '../data/temperamentData';
+import { temperamentTypes } from '../data/temperamentData';
 import { temperamentQuestions } from '../data/temperamentQuestions';
 
-// 双维度计分模型
-// 题1-10: 唤醒度(Arousal) — 高分=容易唤醒(浓), 低分=难以唤醒(淡)
-// 题11-20: 反应性(Reactivity) — 高分=强烈反应(浓), 低分=克制反应(淡)
+/**
+ * 淡人/浓人气质鉴定计分
+ * 双维度模型：情绪唤醒度(Arousal) × 情绪反应性(Reactivity)
+ *
+ * 高唤醒 + 高反应 → 100%超浓缩 (尖叫土拨鼠)
+ * 高唤醒 + 低反应 → 外淡内浓 (保温杯)
+ * 低唤醒 + 高反应 → 间歇性浓人 (薛定谔的疯批)
+ * 低唤醒 + 低反应 → 100%纯血淡人 (水豚卡皮巴拉)
+ */
 
-// Each dimension: 10 questions × max 7 points = 70 max
-const MAX_PER_DIM = 10 * 7;
+// Q1-10: arousal, Q11-20: reactivity
+const AROUSAL_COUNT = 10;
+const REACTIVITY_COUNT = 10;
 
 export function computeTemperamentResults(answers: Map<string, number>): TemperamentResult {
+  // Calculate arousal score (0-100)
   let arousalRaw = 0;
-  let reactivityRaw = 0;
-
-  for (const q of temperamentQuestions) {
-    const answer = answers.get(q.id);
+  let arousalMax = 0;
+  for (let i = 1; i <= AROUSAL_COUNT; i++) {
+    const qId = `TM_${i}`;
+    const answer = answers.get(qId);
     if (answer == null) continue;
-    const score = q.reverse ? 8 - answer : answer;
-
-    if (q.domain === 'arousal') {
-      arousalRaw += score;
-    } else if (q.domain === 'reactivity') {
-      reactivityRaw += score;
-    }
+    arousalMax += 7;
+    const question = temperamentQuestions.find(q => q.id === qId);
+    arousalRaw += question?.reverse ? 8 - answer : answer;
   }
+  const arousal = arousalMax > 0 ? Math.round((arousalRaw / arousalMax) * 100) : 50;
 
-  const arousalPct = Math.round((arousalRaw / MAX_PER_DIM) * 100);
-  const reactivityPct = Math.round((reactivityRaw / MAX_PER_DIM) * 100);
+  // Calculate reactivity score (0-100)
+  let reactivityRaw = 0;
+  let reactivityMax = 0;
+  for (let i = AROUSAL_COUNT + 1; i <= AROUSAL_COUNT + REACTIVITY_COUNT; i++) {
+    const qId = `TM_${i}`;
+    const answer = answers.get(qId);
+    if (answer == null) continue;
+    reactivityMax += 7;
+    const question = temperamentQuestions.find(q => q.id === qId);
+    reactivityRaw += question?.reverse ? 8 - answer : answer;
+  }
+  const reactivity = reactivityMax > 0 ? Math.round((reactivityRaw / reactivityMax) * 100) : 50;
 
-  // Compute proximity to each type (closer in 2D space = higher percentage)
-  // Ideal points in normalized space (0-100):
-  const ideal: Record<string, { a: number; r: number }> = {
-    'pure-bland': { a: 15, r: 15 },             // very low both
-    'bland-outside-rich-inside': { a: 25, r: 80 }, // low arousal + high reactivity
-    'intermittent-rich': { a: 55, r: 50 },        // middle
-    'pure-concentrated': { a: 85, r: 85 },        // very high both
-  };
+  // Determine quadrant → type percentages
+  // Each type's "percentage" = proximity to the 4 corners of the quadrant
+  // pure-bland: (0,0) corner → score = 100 - (arousal + reactivity)/2
+  // pure-intense: (100,100) corner → score = (arousal + reactivity)/2
+  // outside-bland-inside-intense: (100,0) corner → score = (arousal + (100-reactivity))/2
+  // intermittent-intense: (0,100) corner → score = ((100-arousal) + reactivity)/2
 
-  const distances: { id: string; dist: number }[] = temperamentList.map(t => {
-    const pt = ideal[t.id];
-    const dx = arousalPct - pt.a;
-    const dy = reactivityPct - pt.r;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    return { id: t.id, dist };
+  const typeScores: TemperamentTypeScore[] = temperamentTypes.map(t => {
+    let percentage: number;
+    switch (t.id) {
+      case 'pure-bland':
+        percentage = Math.round(100 - (arousal + reactivity) / 2);
+        break;
+      case 'pure-intense':
+        percentage = Math.round((arousal + reactivity) / 2);
+        break;
+      case 'outside-bland-inside-intense':
+        percentage = Math.round((arousal + (100 - reactivity)) / 2);
+        break;
+      case 'intermittent-intense':
+        percentage = Math.round(((100 - arousal) + reactivity) / 2);
+        break;
+      default:
+        percentage = 50;
+    }
+    return { ...t, percentage: Math.max(0, Math.min(100, percentage)) };
   });
 
-  // Convert distances to percentages: shorter distance = higher percentage
-  // Max possible distance in diagonal ≈ 141
-  const maxDist = 141;
-  const rawPcts = distances.map(d => ({
-    id: d.id,
-    raw: Math.max(0, Math.round(100 - (d.dist / maxDist) * 100)),
-  }));
-
-  // Normalize so they sum to ~100%
-  const rawSum = rawPcts.reduce((s, x) => s + x.raw, 0);
-  const scale = rawSum > 0 ? 100 / rawSum : 1;
-
-  const styles: TemperamentScore[] = rawPcts.map(rp => {
-    const tmpl = temperamentList.find(t => t.id === rp.id)!;
-    const pct = Math.round(rp.raw * scale);
-    // Ensure no negative
-    const safePct = Math.max(0, Math.min(100, pct));
-    return { ...tmpl, percentage: safePct };
-  });
-
-  // Sort descending and normalize so top is 100
-  styles.sort((a, b) => b.percentage - a.percentage);
+  typeScores.sort((a, b) => b.percentage - a.percentage);
 
   return {
-    styles,
-    primary: styles[0],
-    arousalRaw,
-    reactivityRaw,
-    arousalPct,
-    reactivityPct,
+    types: typeScores,
+    primary: typeScores[0],
+    arousal,
+    reactivity,
     timestamp: Date.now(),
   };
 }

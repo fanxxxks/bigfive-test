@@ -2,23 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TemperamentResultsReport from '../components/TemperamentResultsReport';
 ---
-
-<BaseLayout
-  title="淡人/浓人气质报告"
-  description="你的淡人/浓人气质鉴定结果——双维度象限分析、四种类型匹配度与深度个性解读。"
->
-  <main class="min-h-screen bg-gray-50 print:bg-white">
-    <div class="max-w-4xl mx-auto px-4 py-8">
-      <TemperamentResultsReport client:only="react" />
-    </div>
-  </main>
+<BaseLayout title="淡人/浓人气质报告" description="你的淡/浓气质鉴定报告——双维度四象限定位、四种类型完整解读与个性化调节建议。">
+  <main class="min-h-screen bg-gray-50 print:bg-white"><div class="max-w-4xl mx-auto px-4 py-8"><TemperamentResultsReport client:only="react" /></div></main>
 </BaseLayout>
-
 <style is:global>
-  @media print {
-    body { background: white !important; }
-    .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
-    a, button { display: none !important; }
-    .bg-gray-50 { background: white !important; }
-  }
+  @media print { body { background: white !important; } .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; } a, button { display: none !important; } .bg-gray-50 { background: white !important; } }
 </style>

@@ -22,7 +22,6 @@ export function computeOverthinkingResults(answers: Map<string, number>): Overth
 
   // Style mapping
   const stylePcts: Record<string, number> = {};
-  const avgHigh = Math.max(0, ...dims.map(d => d.percentage));
   const variance = dims.reduce((s, d) => s + (d.percentage - totalPct) ** 2, 0) / dims.length;
 
   if (totalPct >= 65 && variance < 400) { stylePcts['full-speed'] = 80; stylePcts['selective'] = 20; stylePcts['clear-mind'] = 0; stylePcts['intermittent-overthink'] = 0; }

@@ -459,11 +459,11 @@ export function generateTemperamentMD(r: import('../data/temperamentData').Tempe
   lines.push(`> "${p.tagline}"`);
   lines.push('');
   lines.push(`### 气质数据`);
-  lines.push(`- 情绪唤醒度：${r.arousalPct}%`);
-  lines.push(`- 情绪反应性：${r.reactivityPct}%`);
+  lines.push(`- 情绪唤醒度：${r.arousal}%`);
+  lines.push(`- 情绪反应性：${r.reactivity}%`);
   lines.push('');
   lines.push(`### 各类型匹配度`);
-  for (const s of r.styles) lines.push(`- ${s.emoji} ${s.name}: ${s.percentage}%`);
+  for (const s of r.types) lines.push(`- ${s.emoji} ${s.name}: ${s.percentage}%`);
   lines.push('');
   lines.push('## 深度解读');
   lines.push('');
@@ -482,7 +482,7 @@ export function generateTemperamentMD(r: import('../data/temperamentData').Tempe
   lines.push(p.relationshipStyle);
   lines.push('');
   lines.push('### 🌱 生活建议');
-  lines.push(p.lifeAdvice);
+  lines.push(p.selfRegulation);
   return lines.join('\n');
 }
 
